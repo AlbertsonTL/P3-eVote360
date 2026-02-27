@@ -1,0 +1,112 @@
+@model eVote360.Web.Models.ElectorViewModels.OpcionesPuestosVM
+@{
+    ViewData["Title"] = "Seleccione un Puesto";
+}
+
+<div class="container mt-4">
+    <div class="page-header fade-in text-center">
+        <h1><i class="bi bi-list-check"></i> Proceso de Votación</h1>
+        <p class="lead">Seleccione cada puesto para emitir su voto</p>
+    </div>
+
+    @if (ViewBag.PuestosFaltantes != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <strong>Debe completar su votación.</strong> Aún le faltan los siguientes puestos:
+            <strong>@ViewBag.PuestosFaltantes</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-card-icon primary"><i class="bi bi-ballot"></i></div>
+                <div class="stat-card-title">Total Puestos</div>
+                <div class="stat-card-value">@Model.Puestos.Count</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-card-icon success"><i class="bi bi-check-circle"></i></div>
+                <div class="stat-card-title">Completados</div>
+                <div class="stat-card-value">@Model.Puestos.Count(p => p.YaVoto)</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-card-icon warning"><i class="bi bi-clock"></i></div>
+                <div class="stat-card-title">Pendientes</div>
+                <div class="stat-card-value">@Model.Puestos.Count(p => !p.YaVoto)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        @foreach (var puesto in Model.Puestos)
+        {
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 @(puesto.YaVoto ? "border-success" : "")">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title">
+                                <i class="bi bi-award"></i> @puesto.NombrePuesto
+                            </h5>
+                            @if (puesto.YaVoto)
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check-circle"></i> Votado</span>
+                            }
+                        </div>
+
+                        <p class="text-muted mb-1">
+                            <i class="bi bi-people"></i> @puesto.CantidadCandidatos candidatos
+                        </p>
+                        <p class="text-muted mb-3">
+                            <i class="bi bi-flag"></i> @puesto.CantidadPartidos partidos
+                        </p>
+
+                        @if (!puesto.YaVoto)
+                        {
+                            <a asp-action="Boleta" asp-route-puestoId="@puesto.PuestoId" asp-route-numeroDocumento="@Model.NumeroDocumento"
+                               class="btn btn-primary w-100">
+                                <i class="bi bi-arrow-right-circle"></i> Votar Ahora
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-success w-100" disabled>
+                                <i class="bi bi-check-circle-fill"></i> Voto Registrado
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="mb-0">
+                    <i class="bi bi-info-circle"></i>
+                    Complete la votación para <strong>todos</strong> los puestos antes de finalizar.
+                </p>
+                <form asp-action="Finalizar" method="post">
+                    <input type="hidden" name="numeroDocumento" value="@Model.NumeroDocumento" />
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-check2-all"></i> Finalizar Votación
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

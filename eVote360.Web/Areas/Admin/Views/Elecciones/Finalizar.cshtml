@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Finalizar Elección";
+    int id = ViewBag.ElectionId;
+    string nombre = ViewBag.ElectionNombre ?? "";
+}
+
+<div class="page-header fade-in">
+    <h1><i class="bi bi-stop-circle"></i> Finalizar Elección</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card border-warning slide-up">
+            <div class="card-header bg-warning text-dark">
+                <i class="bi bi-exclamation-triangle-fill"></i> Confirmación Requerida
+            </div>
+            <div class="card-body p-4 text-center">
+                <div class="mb-4">
+                    <i class="bi bi-stop-circle text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h4>¿Está seguro que desea finalizar esta elección?</h4>
+                <p class="text-muted">
+                    <strong>Elección:</strong> @nombre<br />
+                    Esta acción cambiará el estado a <strong>Finalizada</strong> y no podrá revertirse.
+                </p>
+
+                <div class="d-flex gap-3 justify-content-center mt-4">
+                    <form asp-action="Finalize" asp-route-id="@id" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="bi bi-check-circle"></i> Aceptar — Finalizar
+                        </button>
+                    </form>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

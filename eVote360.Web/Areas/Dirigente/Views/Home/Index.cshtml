@@ -1,0 +1,130 @@
+@{
+    ViewData["Title"] = "Panel del Dirigente";
+    bool hasActiveElection = ViewBag.HasActiveElection ?? false;
+    string partidoNombre = ViewBag.PartidoNombre ?? "Sin partido";
+    string partidoSiglas = ViewBag.PartidoSiglas ?? "";
+    string partidoLogo = ViewBag.PartidoLogo ?? "";
+}
+
+<div class="page-header fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-person-badge"></i> Panel del Dirigente Político</h1>
+            <p class="mb-0">Gestione candidatos, puestos y alianzas de su partido</p>
+        </div>
+        @if (hasActiveElection)
+        {
+            <span class="badge bg-success fs-6 p-2">
+                <i class="bi bi-circle-fill"></i> Elección en Proceso
+            </span>
+        }
+    </div>
+</div>
+
+<!-- Partido Info -->
+<div class="card mb-4 border-primary slide-up">
+    <div class="card-body">
+        <div class="d-flex align-items-center gap-4">
+            @if (!string.IsNullOrEmpty(partidoLogo))
+            {
+                <img src="@partidoLogo" alt="Logo @partidoNombre" style="height:80px;width:80px;object-fit:contain;" />
+            }
+            else
+            {
+                <div class="bg-primary rounded d-flex align-items-center justify-content-center" style="height:80px;width:80px;">
+                    <i class="bi bi-flag-fill text-white fs-2"></i>
+                </div>
+            }
+            <div>
+                <h3 class="mb-1 text-primary">@partidoNombre <span class="text-muted fs-5">(@partidoSiglas)</span></h3>
+                <p class="text-muted mb-0"><i class="bi bi-person-badge"></i> Usted es el dirigente de este partido</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row g-4 mb-4 slide-up">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-card-icon success"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="stat-card-title">Candidatos Activos</div>
+            <div class="stat-card-value">@ViewBag.CandidatosActivos</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-card-icon danger"><i class="bi bi-x-circle-fill"></i></div>
+            <div class="stat-card-title">Candidatos Inactivos</div>
+            <div class="stat-card-value">@ViewBag.CandidatosInactivos</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-card-icon primary"><i class="bi bi-handshake-fill"></i></div>
+            <div class="stat-card-title">Alianzas Activas</div>
+            <div class="stat-card-value">@ViewBag.AlianzasActivas</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-card-icon warning"><i class="bi bi-clock-fill"></i></div>
+            <div class="stat-card-title">Solicitudes Pendientes</div>
+            <div class="stat-card-value">@ViewBag.SolicitudesPendientes</div>
+        </div>
+    </div>
+</div>
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="stat-card">
+            <div class="stat-card-icon warning"><i class="bi bi-award-fill"></i></div>
+            <div class="stat-card-title">Candidatos Asignados a Puesto</div>
+            <div class="stat-card-value">@ViewBag.PuestosAsignados</div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Navigation -->
+<div class="row g-4">
+    <div class="col-md-4">
+        <a asp-area="Dirigente" asp-controller="Candidatos" asp-action="Index" class="text-decoration-none">
+            <div class="card h-100 hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 text-primary mb-3"><i class="bi bi-people-fill"></i></div>
+                    <h4>Mis Candidatos</h4>
+                    <p class="text-muted">Administre los candidatos de su partido político</p>
+                    <span class="btn btn-outline-primary">Gestionar Candidatos</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-area="Dirigente" asp-controller="CandidatoPuesto" asp-action="Index" class="text-decoration-none">
+            <div class="card h-100 hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 text-warning mb-3"><i class="bi bi-award-fill"></i></div>
+                    <h4>Asignar Candidato a Puesto</h4>
+                    <p class="text-muted">Asigne candidatos a los puestos electivos disponibles</p>
+                    <span class="btn btn-outline-warning">Gestionar Asignaciones</span>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a asp-area="Dirigente" asp-controller="Alianzas" asp-action="Index" class="text-decoration-none">
+            <div class="card h-100 hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="display-4 text-danger mb-3"><i class="bi bi-handshake-fill"></i></div>
+                    <h4>Alianzas Políticas</h4>
+                    <p class="text-muted">Gestione las alianzas con otros partidos políticos</p>
+                    <span class="btn btn-outline-danger">Ver Alianzas</span>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<style>
+    .hover-card:hover { transform: translateY(-5px); transition: transform 0.2s; box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+    .hover-card { transition: transform 0.2s; }
+</style>

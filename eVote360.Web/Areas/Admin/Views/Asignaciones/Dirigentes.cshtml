@@ -1,0 +1,108 @@
+@using eVote360.Application.DTOs.Response
+@model List<PartyAssignmentResponseDto>
+@{
+    ViewData["Title"] = "Asignación de Dirigentes";
+    bool hasActiveElection = ViewBag.HasActiveElection ?? false;
+}
+
+<div class="page-header fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-person-check-fill"></i> Asignación de Dirigentes</h1>
+            <p class="mb-0">Relacione dirigentes políticos con partidos</p>
+        </div>
+        <div class="d-flex gap-2">
+            @if (!hasActiveElection)
+            {
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle-fill"></i> Nueva Asignación
+                </a>
+            }
+            else
+            {
+                <button class="btn btn-secondary" disabled>
+                    <i class="bi bi-lock"></i> Nueva (Elección activa)
+                </button>
+            }
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-house"></i> Menú Principal
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (hasActiveElection)
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle-fill"></i> <strong>Elección activa:</strong> No se pueden crear ni eliminar asignaciones durante una elección en proceso.
+    </div>
+}
+
+<div class="card">
+    <div class="card-header"><i class="bi bi-list-ul"></i> Dirigentes Asignados</div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Dirigente</th>
+                            <th>Partido (Siglas)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><i class="bi bi-person-badge"></i> <strong>@item.UsuarioNombre</strong></td>
+                                <td>
+                                    <span class="badge bg-primary">@item.PartidoSiglas</span>
+                                    @item.PartidoNombre
+                                </td>
+                                <td>
+                                    @if (!hasActiveElection)
+                                    {
+                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post"
+                                              onsubmit="return confirm('¿Está seguro que desea desvincular este dirigente político de este partido?')">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i> Desvincular
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-sm btn-secondary" disabled><i class="bi bi-lock"></i></button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No hay asignaciones de dirigentes registradas.
+            </div>
+        }
+    </div>
+</div>

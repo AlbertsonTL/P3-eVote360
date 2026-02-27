@@ -1,0 +1,52 @@
+@model eVote360.Application.ViewModels.Position.PositionFormVM
+@{
+    ViewData["Title"] = "Crear Puesto Electivo";
+}
+
+<div class="page-header fade-in">
+    <h1><i class="bi bi-plus-circle-fill"></i> Crear Nuevo Puesto Electivo</h1>
+    <p>Complete la información del nuevo puesto electoral</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card slide-up">
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post" class="needs-validation" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Nombre" class="form-label">
+                            <i class="bi bi-award-fill"></i> Nombre del Puesto
+                        </label>
+                        <input asp-for="Nombre" class="form-control form-control-lg" placeholder="Ej: Presidente, Senador, Diputado..." required />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Descripcion" class="form-label">
+                            <i class="bi bi-card-text"></i> Descripción
+                        </label>
+                        <textarea asp-for="Descripcion" class="form-control" rows="4" placeholder="Describa las responsabilidades y características del puesto..." required></textarea>
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="d-flex gap-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-save-fill"></i> Guardar Puesto
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-x-circle-fill"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

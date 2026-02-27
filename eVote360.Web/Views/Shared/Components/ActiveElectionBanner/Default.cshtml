@@ -1,0 +1,8 @@
+@model eVote360.Domain.Entities.Election.Election
+
+@if (Model != null)
+{
+    <div class="alert alert-info">
+        <strong>Elección Activa:</strong> @Model.Nombre - @Model.FechaRealizacion.ToShortDateString()
+    </div>
+}

@@ -1,0 +1,52 @@
+@model eVote360.Application.ViewModels.Candidates.CandidatoPuestoCreateVM
+@{ ViewData["Title"] = "Asignar Candidato a Puesto"; }
+<div class="page-header"><h1><i class="bi bi-plus-circle"></i> Asignar Candidato a Puesto</h1></div>
+<div class="row"><div class="col-md-7 mx-auto">
+    <div class="card slide-up"><div class="card-body p-4">
+        <div asp-validation-summary="All" class="alert alert-danger"></div>
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="PartyId" />
+            <div class="mb-3">
+                <label class="form-label fw-bold"><i class="bi bi-person"></i> Candidato</label>
+                <select name="CandidateId" class="form-select form-select-lg" required>
+                    <option value="">-- Seleccione un candidato --</option>
+                    @if (ViewBag.Candidatos != null)
+                    {
+                        @foreach (var c in (List<eVote360.Domain.Entities.Candidate.Candidate>)ViewBag.Candidatos)
+                        {
+                            <option value="@c.Id">@c.Nombre @c.Apellido (@c.Party?.Siglas ?? "Propio")</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold"><i class="bi bi-award"></i> Puesto Electivo</label>
+                <select name="PositionId" class="form-select form-select-lg" required>
+                    <option value="">-- Seleccione un puesto --</option>
+                    @if (ViewBag.Puestos != null)
+                    {
+                        @foreach (var p in (List<eVote360.Application.DTOs.Response.PositionResponse>)ViewBag.Puestos)
+                        {
+                            <option value="@p.Id">@p.Nombre</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> <strong>Reglas:</strong>
+                <ul class="mb-0 mt-1">
+                    <li>Solo se muestran candidatos activos no asignados aún.</li>
+                    <li>Solo se muestran puestos sin candidato asignado.</li>
+                    <li>Se incluyen candidatos de partidos aliados.</li>
+                    <li>Un candidato en alianza debe aspirar al mismo puesto que en su partido de origen.</li>
+                </ul>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Asignar</button>
+                <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Volver</a>
+            </div>
+        </form>
+    </div></div>
+</div></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">

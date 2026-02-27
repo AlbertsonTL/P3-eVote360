@@ -1,0 +1,52 @@
+@model eVote360.Application.ViewModels.Candidates.CandidateFormVM
+@{
+    ViewData["Title"] = "Nuevo Candidato";
+}
+
+<div class="page-header">
+    <h1><i class="bi bi-person-plus"></i> Nuevo Candidato</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-body p-4">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="PartyId" />
+                    
+                    <div class="mb-3">
+                        <label asp-for="Nombre" class="form-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Apellido" class="form-label"></label>
+                        <input asp-for="Apellido" class="form-control" />
+                        <span asp-validation-for="Apellido" class="text-danger"></span>
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Foto" class="form-label">Foto del Candidato (opcional)</label>
+                        <input asp-for="Foto" class="form-control" type="file" accept="image/*" />
+                        <small class="text-muted">Formatos: JPG, PNG. Máx 2MB.</small>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Guardar Candidato
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

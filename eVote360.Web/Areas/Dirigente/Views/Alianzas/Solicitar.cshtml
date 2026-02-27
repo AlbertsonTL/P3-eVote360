@@ -1,0 +1,59 @@
+@using eVote360.Application.DTOs.Response
+@{
+    ViewData["Title"] = "Solicitar Alianza";
+    var partidos = ViewBag.Partidos as List<PartyResponse> ?? new();
+}
+
+<div class="page-header">
+    <h1><i class="bi bi-handshake"></i> Solicitar Alianza Política</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-body p-4">
+                @if (!partidos.Any())
+                {
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> No hay partidos disponibles para solicitar alianza.
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="Solicitar" method="post">
+                        <div class="mb-4">
+                            <label for="partyDestinoId" class="form-label fw-bold fs-5">Seleccione el partido</label>
+                            <select name="partyDestinoId" id="partyDestinoId" class="form-select form-select-lg" required>
+                                <option value="">-- Seleccione un partido --</option>
+                                @foreach (var p in partidos)
+                                {
+                                    <option value="@p.Id">@p.Nombre (@p.Siglas)</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="alert alert-info mb-4">
+                            <strong><i class="bi bi-info-circle"></i> Información importante:</strong>
+                            <ul class="mb-0 mt-1">
+                                <li>No puede solicitar una alianza si ya hay una pendiente entre los partidos.</li>
+                                <li>El partido destino deberá aceptar o rechazar la solicitud.</li>
+                                <li>Una vez aceptada, los candidatos aliados pueden postularse para los mismos puestos.</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-send"></i> Enviar Solicitud
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">

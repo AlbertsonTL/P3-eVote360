@@ -1,0 +1,133 @@
+@model eVote360.Application.ViewModels.Admin.AdminResumenVm
+@{
+    ViewData["Title"] = "Panel de Administración";
+}
+
+<div class="page-header fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-speedometer2"></i> Panel de Administración</h1>
+            <p class="mb-0">Bienvenido al sistema de gestión electoral</p>
+        </div>
+        <div>
+            <span class="badge bg-light text-dark">
+                <i class="bi bi-calendar"></i> @DateTime.Now.ToString("dd/MM/yyyy")
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Menú de Navegación Rápida -->
+<div class="row g-4 mb-4 slide-up">
+    <div class="col-md-3">
+        <a href="@Url.Action("Index", "Positions")" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-card-icon primary">
+                    <i class="bi bi-briefcase"></i>
+                </div>
+                <div class="stat-card-title">Puestos Electivos</div>
+                <div class="stat-card-value">Gestionar</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="@Url.Action("Index", "Citizens")" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-card-icon success">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="stat-card-title">Ciudadanos</div>
+                <div class="stat-card-value">Administrar</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="@Url.Action("Index", "Parties")" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-card-icon warning">
+                    <i class="bi bi-flag"></i>
+                </div>
+                <div class="stat-card-title">Partidos</div>
+                <div class="stat-card-value">Ver Todos</div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3">
+        <a href="@Url.Action("Index", "Elecciones")" class="text-decoration-none">
+            <div class="stat-card">
+                <div class="stat-card-icon danger">
+                    <i class="bi bi-card-checklist"></i>
+                </div>
+                <div class="stat-card-title">Elecciones</div>
+                <div class="stat-card-value">Configurar</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Resumen Electoral -->
+<div class="card slide-up">
+    <div class="card-header">
+        <i class="bi bi-graph-up"></i> Resumen Electoral por Año
+    </div>
+    <div class="card-body">
+        <form asp-action="GetResumen" method="post" class="row g-3 align-items-end mb-4">
+            <div class="col-md-4">
+                <label class="form-label">Seleccione el Año</label>
+                <select name="year" class="form-select">
+                    @if (ViewBag.Years != null)
+                    {
+                        @foreach (var year in (List<int>)ViewBag.Years)
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="@DateTime.Now.Year">@DateTime.Now.Year</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Obtener Resumen
+                </button>
+            </div>
+        </form>
+        
+        @if (Model != null && Model.Elections.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-card-heading"></i> Elección</th>
+                            <th><i class="bi bi-flag"></i> Partidos</th>
+                            <th><i class="bi bi-person"></i> Candidatos</th>
+                            <th><i class="bi bi-check2-circle"></i> Total Votos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var election in Model.Elections)
+                        {
+                            <tr>
+                                <td><strong>@election.NombreEleccion</strong></td>
+                                <td><span class="badge bg-info">@election.CantidadPartidos</span></td>
+                                <td><span class="badge bg-success">@election.CantidadCandidatos</span></td>
+                                <td><span class="badge bg-primary">@election.TotalVotos</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Seleccione un año para ver el resumen electoral
+            </div>
+        }
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">

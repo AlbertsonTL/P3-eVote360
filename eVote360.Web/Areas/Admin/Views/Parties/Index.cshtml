@@ -1,0 +1,119 @@
+@model List<eVote360.Application.ViewModels.Party.PartyListVM>
+@{
+    ViewData["Title"] = "Gestión de Partidos Políticos";
+    var hasActiveElection = ViewBag.HasActiveElection ?? false;
+}
+
+<div class="page-header fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-flag-fill"></i> Partidos Políticos</h1>
+            <p class="mb-0">Administre los partidos participantes en el proceso electoral</p>
+        </div>
+        <div>
+            @if (!hasActiveElection)
+            {
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle-fill"></i> Nuevo Partido
+                </a>
+            }
+        </div>
+        <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary ms-2">
+            <i class="bi bi-house"></i> Menú Principal
+        </a>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-icon warning">
+                <i class="bi bi-flag"></i>
+            </div>
+            <div class="stat-card-title">Total Partidos</div>
+            <div class="stat-card-value">@Model.Count</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-icon success">
+                <i class="bi bi-check-circle"></i>
+            </div>
+            <div class="stat-card-title">Activos</div>
+            <div class="stat-card-value">@Model.Count(p => p.IsActive)</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-icon danger">
+                <i class="bi bi-x-circle"></i>
+            </div>
+            <div class="stat-card-title">Inactivos</div>
+            <div class="stat-card-value">@Model.Count(p => !p.IsActive)</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-list-ul"></i> Listado de Partidos
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var party in Model)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 @(party.IsActive ? "border-success" : "border-danger")">
+                            <div class="card-body text-center">
+                                <img src="@party.LogoPath" alt="@party.Nombre" class="party-logo mb-3" style="width: 80px; height: 80px; object-fit: contain;">
+                                <h5 class="card-title">@party.Nombre</h5>
+                                <p class="text-muted mb-2"><strong>@party.Siglas</strong></p>
+                                <p class="card-text small text-muted">@party.Descripcion</p>
+                                @if (party.IsActive)
+                                {
+                                    <span class="badge bg-success mb-3">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger mb-3">Inactivo</span>
+                                }
+                                
+                                @if (!hasActiveElection)
+                                {
+                                    <div class="btn-group w-100" role="group">
+                                        <a asp-action="Edit" asp-route-id="@party.Id" class="btn btn-sm btn-warning">
+                                            <i class="bi bi-pencil"></i> Editar
+                                        </a>
+                                        <form asp-action="Toggle" asp-route-id="@party.Id" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-sm @(party.IsActive ? "btn-danger" : "btn-success")">
+                                                <i class="bi bi-@(party.IsActive ? "x-circle" : "check-circle")"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No hay partidos registrados.
+            </div>
+        }
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">

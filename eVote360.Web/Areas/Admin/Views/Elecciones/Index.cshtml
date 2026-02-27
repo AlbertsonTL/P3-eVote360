@@ -1,0 +1,136 @@
+@model List<eVote360.Application.ViewModels.Elections.ElectionListVM>
+@{
+    ViewData["Title"] = "Gestión de Elecciones";
+}
+
+<div class="page-header fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-card-checklist"></i> Gestión de Elecciones</h1>
+            <p class="mb-0">Administre los procesos electorales del sistema</p>
+        </div>
+        <div class="d-flex gap-2">
+            @if (!Model.Any(e => e.EsActiva))
+            {
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle-fill"></i> Nueva Elección
+                </a>
+            }
+            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-house"></i> Menú Principal
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-icon primary"><i class="bi bi-card-checklist"></i></div>
+            <div class="stat-card-title">Total Elecciones</div>
+            <div class="stat-card-value">@Model.Count</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-icon success"><i class="bi bi-circle-fill"></i></div>
+            <div class="stat-card-title">En Proceso</div>
+            <div class="stat-card-value">@Model.Count(e => e.EsActiva)</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <div class="stat-card-icon warning"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="stat-card-title">Finalizadas</div>
+            <div class="stat-card-value">@Model.Count(e => !e.EsActiva)</div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-list-ul"></i> Listado de Elecciones
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Fecha de Realización</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var election in Model)
+                        {
+                            <tr class="@(election.EsActiva ? "table-success" : "")">
+                                <td>@election.Id</td>
+                                <td>
+                                    <strong>@election.Nombre</strong>
+                                    @if (election.EsActiva)
+                                    {
+                                        <span class="badge bg-success ms-2">ACTIVA</span>
+                                    }
+                                </td>
+                                <td>@election.FechaRealizacion.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (election.EsActiva)
+                                    {
+                                        <span class="badge bg-success"><i class="bi bi-circle-fill"></i> En Proceso</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary"><i class="bi bi-check-circle-fill"></i> Finalizada</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        @if (!election.EsActiva)
+                                        {
+                                            <a asp-action="Resultados" asp-route-id="@election.Id" class="btn btn-sm btn-info">
+                                                <i class="bi bi-bar-chart"></i> Ver Resultados
+                                            </a>
+                                        }
+                                        @if (election.EsActiva)
+                                        {
+                                            <a asp-action="ConfirmarFinalizar" asp-route-id="@election.Id" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-stop-circle"></i> Finalizar
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No hay elecciones registradas.
+                <a asp-action="Create" class="alert-link">Crear primera elección</a>
+            </div>
+        }
+    </div>
+</div>

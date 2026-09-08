@@ -1,0 +1,31 @@
+<!--
+    Modal de confirmación GLOBAL y reutilizable.
+    No renderizar más de una instancia por página.
+    Se activa declarativamente desde cualquier <form>/<a> con data-confirm="true".
+    Ver wwwroot/js/site.js (EVoteModal) para el comportamiento.
+-->
+<div class="modal fade" id="evoteConfirmModal" tabindex="-1" aria-labelledby="evoteConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="evoteConfirmModalLabel" data-role="confirm-title">Confirmar acción</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body evote-modal-body">
+                <div class="evote-modal-icon type-warning" data-role="confirm-icon">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <p class="mb-0" data-role="confirm-message">¿Está seguro que desea realizar esta acción?</p>
+                <p class="evote-modal-consequence d-none" data-role="confirm-consequence"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-warning" data-role="confirm-ok">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

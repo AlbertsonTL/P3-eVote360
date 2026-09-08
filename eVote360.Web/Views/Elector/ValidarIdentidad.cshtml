@@ -3,11 +3,17 @@
     ViewData["Title"] = "Validar Identidad";
 }
 
-<div class="container mt-5">
+<div class="container mt-4 mt-md-5">
     <div class="row">
         <div class="col-md-8 mx-auto">
+            <ol class="vote-steps">
+                <li class="active">Documento</li>
+                <li>Puestos</li>
+                <li>Candidatos</li>
+                <li>Finalizar</li>
+            </ol>
             <div class="card voting-card fade-in">
-                <div class="card-body p-5">
+                <div class="card-body p-4 p-md-5">
                     <div class="text-center mb-4">
                         <div class="stat-card-icon primary mx-auto mb-3" style="width: 100px; height: 100px;">
                             <i class="bi bi-shield-check" style="font-size: 3rem;"></i>
@@ -34,7 +40,7 @@
                         </ul>
                     </div>
 
-                    <form asp-action="ValidarIdentidad" method="post" enctype="multipart/form-data">
+                    <form asp-action="ValidarIdentidad" method="post" enctype="multipart/form-data" id="ocrForm">
                         <input type="hidden" asp-for="NumeroDocumento" />
                         
                         <div class="mb-4">
@@ -54,7 +60,7 @@
                             <img id="preview" src="#" alt="Vista previa" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                         </div>
 
-                        <div class="d-flex gap-3">
+                        <div class="d-flex flex-column flex-sm-row gap-2">
                             <button type="submit" class="btn btn-primary btn-lg flex-grow-1">
                                 <i class="bi bi-check-circle-fill"></i> Validar Identidad
                             </button>
@@ -75,7 +81,6 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -84,7 +89,7 @@
             const preview = document.getElementById('preview');
             const previewContainer = document.getElementById('imagePreview');
             const file = event.target.files[0];
-            
+
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -94,5 +99,13 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        // Feedback visual mientras se procesa el OCR de la cédula.
+        // El botón ya queda deshabilitado por el guard global anti doble-submit (site.js);
+        // aquí solo añadimos el overlay con mensaje contextual.
+        document.getElementById('ocrForm').addEventListener('submit', function (e) {
+            if (!this.checkValidity()) return; // deja que la validación nativa/Bootstrap actúe primero
+            window.showLoading('Estamos verificando los datos de tu documento...');
+        });
     </script>
 }

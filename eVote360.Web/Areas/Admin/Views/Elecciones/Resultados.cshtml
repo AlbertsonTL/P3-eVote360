@@ -4,7 +4,7 @@
 }
 
 <div class="page-header fade-in">
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div>
             <h1><i class="bi bi-bar-chart"></i> Resultados Electorales</h1>
             <p class="mb-0">@Model.EleccionNombre — @Model.FechaRealizacion.ToString("dd/MM/yyyy")</p>
@@ -36,47 +36,49 @@ else
                 <span class="badge bg-light text-primary">@puesto.TotalVotosPuesto votos</span>
             </div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th style="width:40px;">#</th>
-                            <th>Candidato</th>
-                            <th>Partido</th>
-                            <th>Votos</th>
-                            <th style="width:200px;">Porcentaje</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @{int rank = 1;}
-                        @foreach (var candidato in puesto.Candidatos)
-                        {
-                            var badgeClass = rank == 1 ? "bg-warning text-dark" : rank == 2 ? "bg-secondary" : "bg-light text-muted";
-                            var barColor = rank == 1 ? "bg-success" : rank == 2 ? "bg-primary" : "bg-secondary";
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
                             <tr>
-                                <td><span class="badge @badgeClass">@rank</span></td>
-                                <td><strong>@candidato.CandidatoNombre</strong></td>
-                                <td>
-                                    @candidato.PartidoNombre
-                                    @if (!string.IsNullOrEmpty(candidato.PartidoSiglas))
-                                    {
-                                        <span class="text-muted">(@candidato.PartidoSiglas)</span>
-                                    }
-                                </td>
-                                <td><strong>@candidato.Votos</strong></td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="progress flex-grow-1" style="height:18px;">
-                                            <div class="progress-bar @barColor" style="width:@candidato.Porcentaje%">
-                                                @candidato.Porcentaje%
+                                <th style="width:40px;">#</th>
+                                <th>Candidato</th>
+                                <th>Partido</th>
+                                <th>Votos</th>
+                                <th style="min-width:160px;">Porcentaje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int rank = 1;}
+                            @foreach (var candidato in puesto.Candidatos)
+                            {
+                                var badgeClass = rank == 1 ? "bg-warning text-dark" : rank == 2 ? "bg-secondary" : "bg-light text-muted";
+                                var barColor = rank == 1 ? "bg-success" : rank == 2 ? "bg-primary" : "bg-secondary";
+                                <tr>
+                                    <td><span class="badge @badgeClass">@rank</span></td>
+                                    <td><strong>@candidato.CandidatoNombre</strong></td>
+                                    <td>
+                                        @candidato.PartidoNombre
+                                        @if (!string.IsNullOrEmpty(candidato.PartidoSiglas))
+                                        {
+                                            <span class="text-muted">(@candidato.PartidoSiglas)</span>
+                                        }
+                                    </td>
+                                    <td><strong>@candidato.Votos</strong></td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="progress flex-grow-1" style="height:18px;">
+                                                <div class="progress-bar @barColor" style="width:@candidato.Porcentaje%">
+                                                    @candidato.Porcentaje%
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            rank++;
-                        }
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                                rank++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     }

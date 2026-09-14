@@ -1,0 +1,93 @@
+@{
+    // Navegación unificada para las áreas Admin y Dirigente.
+    // Sustituye a los partials huérfanos _AdminNav / _DirigNav / _DirigenteNav
+    // (no estaban referenciados en ningún lado, por lo que hoy no existe
+    // navegación persistente para estos roles).
+    var area = ViewContext.RouteData.Values["area"]?.ToString();
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+    bool IsActive(string ctrl) => string.Equals(controller, ctrl, StringComparison.OrdinalIgnoreCase);
+
+    string brand = area == "Admin" ? "Panel de Administración" : "Panel del Dirigente";
+    string brandIcon = area == "Admin" ? "bi-shield-check" : "bi-person-badge";
+    string navClass = area == "Admin" ? "bg-dark" : "bg-primary";
+    string userName = Context.Session.GetString("UserNombre");
+}
+
+<nav class="navbar navbar-expand-lg navbar-dark app-nav @navClass mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-area="@area" asp-controller="Home" asp-action="Index">
+            <i class="bi @brandIcon"></i> @brand
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#areaOffcanvasNav" aria-controls="areaOffcanvasNav" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Desktop / tablet: navegación horizontal -->
+        <div class="d-none d-lg-flex flex-grow-1 justify-content-between align-items-center">
+            <ul class="navbar-nav me-auto">
+                @if (area == "Admin")
+                {
+                    <li class="nav-item"><a class="nav-link @(IsActive("Positions") ? "active" : "")" asp-area="Admin" asp-controller="Positions" asp-action="Index"><i class="bi bi-briefcase"></i> Puestos</a></li>
+                    <li class="nav-item"><a class="nav-link @(IsActive("Citizens") ? "active" : "")" asp-area="Admin" asp-controller="Citizens" asp-action="Index"><i class="bi bi-people"></i> Ciudadanos</a></li>
+                    <li class="nav-item"><a class="nav-link @(IsActive("Parties") ? "active" : "")" asp-area="Admin" asp-controller="Parties" asp-action="Index"><i class="bi bi-flag"></i> Partidos</a></li>
+                    <li class="nav-item"><a class="nav-link @(IsActive("Users") ? "active" : "")" asp-area="Admin" asp-controller="Users" asp-action="Index"><i class="bi bi-person-badge"></i> Usuarios</a></li>
+                    <li class="nav-item"><a class="nav-link @(IsActive("Asignaciones") ? "active" : "")" asp-area="Admin" asp-controller="Asignaciones" asp-action="Dirigentes"><i class="bi bi-person-check"></i> Asignaciones</a></li>
+                    <li class="nav-item"><a class="nav-link @(IsActive("Elecciones") ? "active" : "")" asp-area="Admin" asp-controller="Elecciones" asp-action="Index"><i class="bi bi-card-checklist"></i> Elecciones</a></li>
+                }
+                else if (area == "Dirigente")
+                {
+                    <li class="nav-item"><a class="nav-link @(IsActive("Candidatos") ? "active" : "")" asp-area="Dirigente" asp-controller="Candidatos" asp-action="Index"><i class="bi bi-people"></i> Candidatos</a></li>
+                    <li class="nav-item"><a class="nav-link @(IsActive("CandidatoPuesto") ? "active" : "")" asp-area="Dirigente" asp-controller="CandidatoPuesto" asp-action="Index"><i class="bi bi-award"></i> Candidato a Puesto</a></li>
+                    <li class="nav-item"><a class="nav-link @(IsActive("Alianzas") ? "active" : "")" asp-area="Dirigente" asp-controller="Alianzas" asp-action="Index"><i class="bi bi-handshake"></i> Alianzas</a></li>
+                }
+            </ul>
+            <ul class="navbar-nav align-items-lg-center">
+                @if (!string.IsNullOrEmpty(userName))
+                {
+                    <li class="nav-item navbar-user pe-3"><i class="bi bi-person-circle"></i> @userName</li>
+                }
+                <li class="nav-item">
+                    <a class="nav-link text-warning" asp-controller="Login" asp-action="Logout" asp-area="">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Móvil / tablet pequeña: menú lateral offcanvas -->
+<div class="offcanvas offcanvas-start app-nav-offcanvas d-lg-none" tabindex="-1" id="areaOffcanvasNav" aria-labelledby="areaOffcanvasNavLabel">
+    <div class="offcanvas-header @navClass text-white">
+        <h5 class="offcanvas-title" id="areaOffcanvasNavLabel"><i class="bi @brandIcon"></i> @brand</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        @if (!string.IsNullOrEmpty(userName))
+        {
+            <div class="mb-3 pb-3 border-bottom text-muted"><i class="bi bi-person-circle"></i> @userName</div>
+        }
+        <ul class="navbar-nav flex-grow-1">
+            @if (area == "Admin")
+            {
+                <li class="nav-item"><a class="nav-link @(IsActive("Positions") ? "active" : "")" asp-area="Admin" asp-controller="Positions" asp-action="Index"><i class="bi bi-briefcase"></i> Puestos</a></li>
+                <li class="nav-item"><a class="nav-link @(IsActive("Citizens") ? "active" : "")" asp-area="Admin" asp-controller="Citizens" asp-action="Index"><i class="bi bi-people"></i> Ciudadanos</a></li>
+                <li class="nav-item"><a class="nav-link @(IsActive("Parties") ? "active" : "")" asp-area="Admin" asp-controller="Parties" asp-action="Index"><i class="bi bi-flag"></i> Partidos</a></li>
+                <li class="nav-item"><a class="nav-link @(IsActive("Users") ? "active" : "")" asp-area="Admin" asp-controller="Users" asp-action="Index"><i class="bi bi-person-badge"></i> Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link @(IsActive("Asignaciones") ? "active" : "")" asp-area="Admin" asp-controller="Asignaciones" asp-action="Dirigentes"><i class="bi bi-person-check"></i> Asignaciones</a></li>
+                <li class="nav-item"><a class="nav-link @(IsActive("Elecciones") ? "active" : "")" asp-area="Admin" asp-controller="Elecciones" asp-action="Index"><i class="bi bi-card-checklist"></i> Elecciones</a></li>
+            }
+            else if (area == "Dirigente")
+            {
+                <li class="nav-item"><a class="nav-link @(IsActive("Candidatos") ? "active" : "")" asp-area="Dirigente" asp-controller="Candidatos" asp-action="Index"><i class="bi bi-people"></i> Candidatos</a></li>
+                <li class="nav-item"><a class="nav-link @(IsActive("CandidatoPuesto") ? "active" : "")" asp-area="Dirigente" asp-controller="CandidatoPuesto" asp-action="Index"><i class="bi bi-award"></i> Candidato a Puesto</a></li>
+                <li class="nav-item"><a class="nav-link @(IsActive("Alianzas") ? "active" : "")" asp-area="Dirigente" asp-controller="Alianzas" asp-action="Index"><i class="bi bi-handshake"></i> Alianzas</a></li>
+            }
+        </ul>
+        <a class="nav-link text-danger border-top pt-3" asp-controller="Login" asp-action="Logout" asp-area="">
+            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+        </a>
+    </div>
+</div>

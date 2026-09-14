@@ -5,54 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - eVote360</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-shield-check"></i> eVote360
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door"></i> Inicio
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        @if (Context.Session.GetInt32("UserId") != null || Context.Session.GetInt32("CitizenId") != null)
-                        {
+    @{
+        var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+        bool isAppArea = currentArea == "Admin" || currentArea == "Dirigente";
+    }
+    @if (!isAppArea)
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-shield-check"></i> eVote360
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-label="Abrir menú">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Logout">
-                                    <i class="bi bi-box-arrow-right"></i> Salir
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house-door"></i> Inicio
                                 </a>
                             </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">
-                                    <i class="bi bi-box-arrow-in-right"></i> Acceder
-                                </a>
-                            </li>
-                        }
-                    </ul>
+                        </ul>
+                        <ul class="navbar-nav">
+                            @if (Context.Session.GetInt32("UserId") != null || Context.Session.GetInt32("CitizenId") != null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Logout">
+                                        <i class="bi bi-box-arrow-right"></i> Salir
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">
+                                        <i class="bi bi-box-arrow-in-right"></i> Acceder
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
+            </nav>
+        </header>
+    }
+    else
+    {
+        <partial name="_AreaNav" />
+    }
+    <div class="container-fluid px-3 px-md-4" style="max-width: 1320px;">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
+    <partial name="_ConfirmModal" />
 
     <footer class="footer text-muted">
         <div class="container">

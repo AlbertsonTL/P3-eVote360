@@ -5,12 +5,12 @@
 }
 
 <div class="page-header fade-in">
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div>
             <h1><i class="bi bi-person-badge"></i> Usuarios</h1>
             <p class="mb-0">Administre los usuarios del sistema</p>
         </div>
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 flex-wrap">
             @if (!hasActiveElection)
             {
                 <a asp-action="Create" class="btn btn-primary">
@@ -20,12 +20,9 @@
             else
             {
                 <button class="btn btn-secondary" disabled title="No se pueden crear usuarios durante una elección activa">
-                    <i class="bi bi-lock"></i> Nueva (Elección activa)
+                    <i class="bi bi-lock"></i> Nuevo (Bloqueado)
                 </button>
             }
-            <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-house"></i> Menú Principal
-            </a>
         </div>
     </div>
 </div>
@@ -47,18 +44,31 @@
 
 @if (hasActiveElection)
 {
-    <div class="alert alert-warning">
-        <i class="bi bi-exclamation-triangle-fill"></i> <strong>Elección activa:</strong> No se pueden crear, editar ni cambiar el estado de usuarios mientras haya una elección en proceso.
+    <div class="election-lock-banner">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <div><strong>Elección activa:</strong> no se pueden crear, editar ni cambiar el estado de usuarios mientras haya una elección en proceso.</div>
     </div>
 }
 
 <div class="card">
     <div class="card-header"><i class="bi bi-list-ul"></i> Listado de Usuarios</div>
     <div class="card-body">
-        @if (Model.Any())
+        @if (!Model.Any())
         {
-            <div class="table-responsive">
-                <table class="table table-hover">
+            <div class="empty-state">
+                <i class="bi bi-person-badge"></i>
+                <h5>No hay usuarios registrados</h5>
+                <p>Los usuarios que registres aparecerán aquí.</p>
+                @if (!hasActiveElection)
+                {
+                    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-person-plus-fill"></i> Crear usuario</a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="data-table-wrap table-responsive">
+                <table class="table table-hover align-middle">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -67,7 +77,7 @@
                             <th>Usuario</th>
                             <th>Rol</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
+                            <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -84,24 +94,25 @@
                                         @(item.IsActive ? "Activo" : "Inactivo")
                                     </span>
                                 </td>
-                                <td>
+                                <td class="text-end">
                                     @if (!hasActiveElection)
                                     {
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        if (item.IsActive)
-                                        {
-                                            <a asp-action="ConfirmToggle" asp-route-id="@item.Id" asp-route-activate="false" class="btn btn-sm btn-danger ms-1">
-                                                <i class="bi bi-toggle-off"></i> Desactivar
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a asp-action="ConfirmToggle" asp-route-id="@item.Id" asp-route-activate="true" class="btn btn-sm btn-success ms-1">
-                                                <i class="bi bi-toggle-on"></i> Activar
-                                            </a>
-                                        }
+                                        <form asp-action="Toggle" asp-route-id="@item.Id" method="post" class="d-inline"
+                                              data-confirm="true"
+                                              data-confirm-title="@(item.IsActive ? "Confirmar desactivación" : "Confirmar activación")"
+                                              data-confirm-message="¿Está seguro que desea @(item.IsActive ? "desactivar" : "activar") al usuario @item.Nombre @item.Apellido?"
+                                              data-confirm-consequence="@(item.IsActive ? "El usuario no podrá iniciar sesión mientras esté inactivo." : "El usuario podrá volver a iniciar sesión en el sistema.")"
+                                              data-confirm-variant="@(item.IsActive ? "danger" : "success")"
+                                              data-confirm-ok="@(item.IsActive ? "Desactivar" : "Activar")">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-sm @(item.IsActive ? "btn-danger" : "btn-success")">
+                                                <i class="bi bi-toggle-@(item.IsActive ? "off" : "on")"></i>
+                                                @(item.IsActive ? "Desactivar" : "Activar")
+                                            </button>
+                                        </form>
                                     }
                                     else
                                     {
@@ -113,11 +124,45 @@
                     </tbody>
                 </table>
             </div>
-        }
-        else
-        {
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> No hay usuarios registrados.
+
+            <div class="data-card-list">
+                @foreach (var item in Model)
+                {
+                    <div class="data-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong>@item.Nombre @item.Apellido</strong>
+                            <span class="badge @(item.IsActive ? "bg-success" : "bg-danger")">
+                                @(item.IsActive ? "Activo" : "Inactivo")
+                            </span>
+                        </div>
+                        <div class="data-card-row"><span class="label">Usuario</span><span class="value"><code>@item.NombreUsuario</code></span></div>
+                        <div class="data-card-row"><span class="label">Email</span><span class="value">@item.Email</span></div>
+                        <div class="data-card-row"><span class="label">Rol</span><span class="value"><span class="badge bg-info">@item.Rol</span></span></div>
+                        @if (!hasActiveElection)
+                        {
+                            <div class="data-card-actions">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Editar</a>
+                                <form asp-action="Toggle" asp-route-id="@item.Id" method="post"
+                                      data-confirm="true"
+                                      data-confirm-title="@(item.IsActive ? "Confirmar desactivación" : "Confirmar activación")"
+                                      data-confirm-message="¿Está seguro que desea @(item.IsActive ? "desactivar" : "activar") al usuario @item.Nombre @item.Apellido?"
+                                      data-confirm-consequence="@(item.IsActive ? "El usuario no podrá iniciar sesión mientras esté inactivo." : "El usuario podrá volver a iniciar sesión en el sistema.")"
+                                      data-confirm-variant="@(item.IsActive ? "danger" : "success")"
+                                      data-confirm-ok="@(item.IsActive ? "Desactivar" : "Activar")">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm @(item.IsActive ? "btn-danger" : "btn-success") w-100">
+                                        <i class="bi bi-toggle-@(item.IsActive ? "off" : "on")"></i>
+                                        @(item.IsActive ? "Desactivar" : "Activar")
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-secondary w-100 mt-2" disabled><i class="bi bi-lock"></i> Bloqueado</button>
+                        }
+                    </div>
+                }
             </div>
         }
     </div>

@@ -7,7 +7,7 @@
 }
 
 <div class="page-header fade-in">
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div>
             <h1><i class="bi bi-handshake-fill"></i> Alianzas Políticas</h1>
             <p class="mb-0">Gestione las alianzas con otros partidos</p>
@@ -19,9 +19,6 @@
                     <i class="bi bi-plus-circle-fill"></i> Solicitar Alianza
                 </a>
             }
-            <a asp-area="Dirigente" asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
-                <i class="bi bi-house"></i> Menú Principal
-            </a>
         </div>
     </div>
 </div>
@@ -54,18 +51,32 @@
         <div class="card-body">
             @foreach (var p in pendientes)
             {
-                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 py-2 border-bottom">
                     <div>
                         <strong>@p.PartyOrigenNombre (@p.PartyOrigenSiglas)</strong> solicita alianza
                         <br><small class="text-muted">@p.FechaSolicitud.ToString("dd/MM/yyyy HH:mm")</small>
                     </div>
-                    <div class="d-flex gap-2">
-                        <form asp-action="Aceptar" asp-route-id="@p.Id" method="post">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <form asp-action="Aceptar" asp-route-id="@p.Id" method="post"
+                              data-confirm="true"
+                              data-confirm-title="Aceptar alianza"
+                              data-confirm-message="¿Está seguro que desea aceptar la alianza con @p.PartyOrigenNombre (@p.PartyOrigenSiglas)?"
+                              data-confirm-consequence="Una vez aceptada, los candidatos aliados podrán postularse para los mismos puestos."
+                              data-confirm-variant="success"
+                              data-confirm-ok="Aceptar">
+                            @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-success btn-sm">
                                 <i class="bi bi-check-circle"></i> Aceptar
                             </button>
                         </form>
-                        <form asp-action="Rechazar" asp-route-id="@p.Id" method="post">
+                        <form asp-action="Rechazar" asp-route-id="@p.Id" method="post"
+                              data-confirm="true"
+                              data-confirm-title="Rechazar alianza"
+                              data-confirm-message="¿Está seguro que desea rechazar la alianza con @p.PartyOrigenNombre (@p.PartyOrigenSiglas)?"
+                              data-confirm-consequence="Esta solicitud quedará marcada como rechazada y no podrá revertirse."
+                              data-confirm-variant="danger"
+                              data-confirm-ok="Rechazar">
+                            @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-danger btn-sm">
                                 <i class="bi bi-x-circle"></i> Rechazar
                             </button>
@@ -80,9 +91,21 @@
 <div class="card">
     <div class="card-header"><i class="bi bi-list-ul"></i> Historial de Alianzas</div>
     <div class="card-body">
-        @if (Model.Any())
+        @if (!Model.Any())
         {
-            <div class="table-responsive">
+            <div class="empty-state">
+                <i class="bi bi-handshake"></i>
+                <h5>No hay alianzas registradas</h5>
+                <p>Las alianzas que solicites o recibas aparecerán aquí.</p>
+                @if (!hasActiveElection)
+                {
+                    <a asp-action="Solicitar" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i> Solicitar alianza</a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="data-table-wrap table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
@@ -136,14 +159,40 @@
                     </tbody>
                 </table>
             </div>
-        }
-        else
-        {
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> No hay alianzas registradas.
+
+            <div class="data-card-list">
+                @foreach (var a in Model)
+                {
+                    <div class="data-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            @if (a.PartyOrigenId == myPartyId)
+                            {
+                                <strong>@a.PartyDestinoNombre <span class="badge bg-light text-dark">@a.PartyDestinoSiglas</span></strong>
+                            }
+                            else
+                            {
+                                <strong>@a.PartyOrigenNombre <span class="badge bg-light text-dark">@a.PartyOrigenSiglas</span></strong>
+                            }
+                            @switch (a.Estado)
+                            {
+                                case "Aceptada":
+                                    <span class="badge bg-success">Aceptada</span>
+                                    break;
+                                case "Rechazada":
+                                    <span class="badge bg-danger">Rechazada</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-warning text-dark">Pendiente</span>
+                                    break;
+                            }
+                        </div>
+                        <div class="data-card-row"><span class="label">Tipo</span><span class="value">@(a.EsRecibida ? "Recibida" : "Enviada")</span></div>
+                        <div class="data-card-row"><span class="label">Solicitud</span><span class="value">@a.FechaSolicitud.ToString("dd/MM/yyyy")</span></div>
+                        <div class="data-card-row"><span class="label">Respuesta</span><span class="value">@(a.FechaRespuesta.HasValue ? a.FechaRespuesta.Value.ToString("dd/MM/yyyy") : "-")</span></div>
+                    </div>
+                }
             </div>
         }
     </div>
 </div>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">

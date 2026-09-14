@@ -277,3 +277,279 @@ body {
     .stat-card { padding:1rem; }
     .stat-card-value { font-size:1.5rem; }
 }
+
+/* =========================================================
+   AMPLIACIÓN DEL DESIGN SYSTEM — UI/UX Mobile First
+   ========================================================= */
+
+/* Evitar overflow horizontal accidental en toda la app */
+html, body { overflow-x: hidden; max-width: 100%; }
+img, svg { max-width: 100%; height: auto; }
+
+/* Estados FOCUS accesibles (no depender solo de :focus del navegador) */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid rgba(20,184,166,0.5);
+    outline-offset: 2px;
+}
+
+/* Estado DISABLED consistente */
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* TOUCH TARGETS — botones cómodos para dedos (mínimo 44px) */
+.btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+}
+.btn-sm { min-height: 36px; padding: 0.4rem 0.9rem; }
+.btn-lg { min-height: 52px; }
+
+/* Botones peligrosos: comunicar significado más allá del color */
+.btn-danger, .btn-outline-danger { font-weight: 600; }
+.btn-danger i, .btn-outline-danger i { margin-right: .15rem; }
+
+/* Logo de partido (usado en listados y boleta electoral) */
+.party-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+    padding: 4px;
+    box-shadow: var(--box-shadow);
+}
+
+/* =========================================================
+   NAVEGACIÓN RESPONSIVE (Admin / Dirigente) — offcanvas mobile
+   ========================================================= */
+.app-nav {
+    box-shadow: var(--box-shadow);
+}
+.app-nav .navbar-brand { color: #fff !important; font-weight: 700; }
+.app-nav .nav-link {
+    color: rgba(255,255,255,0.85) !important;
+    font-weight: 500;
+    border-radius: var(--border-radius);
+    padding: .6rem 1rem !important;
+    transition: .2s;
+}
+.app-nav .nav-link:hover { color: #fff !important; background: rgba(255,255,255,0.12); }
+.app-nav .nav-link.active {
+    color: #fff !important;
+    background: rgba(255,255,255,0.22);
+    font-weight: 700;
+}
+.app-nav .navbar-user { color: rgba(255,255,255,0.85); font-size: .9rem; }
+
+/* En móvil, el menú de área se muestra como offcanvas lateral */
+.app-nav-offcanvas { max-width: 300px; }
+.app-nav-offcanvas .nav-link { color: var(--dark-color); padding: .8rem 1rem; border-radius: var(--border-radius); }
+.app-nav-offcanvas .nav-link:hover { background: var(--light-color); }
+.app-nav-offcanvas .nav-link.active { background: var(--primary-color); color: #fff !important; }
+
+/* =========================================================
+   ESTADOS VACÍOS
+   ========================================================= */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+}
+.empty-state i {
+    font-size: 3rem;
+    color: #b8d3d9;
+    margin-bottom: 1rem;
+    display: block;
+}
+.empty-state h5 { color: var(--secondary-color); margin-bottom: .5rem; }
+.empty-state p { color: #6b7280; margin-bottom: 1.25rem; }
+
+/* =========================================================
+   LOADING STATES / DOBLE SUBMIT
+   ========================================================= */
+.btn.is-loading { pointer-events: none; position: relative; color: transparent !important; }
+.btn.is-loading::after {
+    content: "";
+    position: absolute;
+    width: 1.1rem;
+    height: 1.1rem;
+    top: 50%; left: 50%;
+    margin-top: -0.55rem; margin-left: -0.55rem;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: btnSpin .6s linear infinite;
+}
+.btn-outline-secondary.is-loading::after,
+.btn-secondary.is-loading::after { border-color: rgba(0,0,0,0.25); border-top-color: var(--secondary-color); }
+@keyframes btnSpin { to { transform: rotate(360deg); } }
+
+.spinner-overlay {
+    position: fixed; inset: 0;
+    background: rgba(240,251,255,0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000;
+}
+
+/* =========================================================
+   MODALS GLOBALES (información / éxito / advertencia / error / confirmación)
+   ========================================================= */
+.modal-content {
+    border: none;
+    border-radius: calc(var(--border-radius) + 4px);
+    overflow: hidden;
+}
+.modal-header { border-bottom: none; padding: 1.25rem 1.5rem 0; }
+.modal-footer { border-top: none; padding: 0 1.5rem 1.5rem; gap: .5rem; }
+.modal-body { padding: 1rem 1.5rem 1.5rem; }
+
+.evote-modal-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1rem;
+}
+.evote-modal-icon.type-success { background: #d1fae5; color: #065f46; }
+.evote-modal-icon.type-error   { background: #fee2e2; color: #991b1b; }
+.evote-modal-icon.type-warning { background: #fef3c7; color: #92400e; }
+.evote-modal-icon.type-info    { background: #cffafe; color: #155e75; }
+.evote-modal-icon.type-confirm { background: #fef3c7; color: #92400e; }
+.evote-modal-icon.type-danger  { background: #fee2e2; color: #991b1b; }
+
+.evote-modal-body { text-align: center; }
+.evote-modal-body .evote-modal-consequence {
+    font-size: .9rem;
+    color: #6b7280;
+    background: var(--light-color);
+    border-radius: var(--border-radius);
+    padding: .75rem 1rem;
+    margin-top: .75rem;
+}
+
+/* En móvil, los modals de confirmación apilan los botones a ancho completo */
+@media (max-width: 575.98px) {
+    .modal-footer { flex-direction: column-reverse; }
+    .modal-footer > .btn { width: 100%; margin: 0; }
+    .modal-dialog { margin: .75rem; }
+}
+
+/* =========================================================
+   LISTADOS RESPONSIVE — patrón híbrido tabla/cards
+   Mostrar tabla en >= md, cards apiladas en < md.
+   ========================================================= */
+.data-table-wrap { display: none; }
+.data-card-list { display: block; }
+@media (min-width: 768px) {
+    .data-table-wrap { display: block; }
+    .data-card-list { display: none; }
+}
+
+.data-card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1rem;
+    margin-bottom: .75rem;
+}
+.data-card-row {
+    display: flex;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: .35rem 0;
+    border-bottom: 1px dashed #e5eef0;
+    font-size: .92rem;
+}
+.data-card-row:last-of-type { border-bottom: none; }
+.data-card-row .label { color: #6b7280; font-weight: 600; }
+.data-card-row .value { text-align: right; }
+.data-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: .75rem;
+}
+.data-card-actions > * { flex: 1 1 auto; }
+
+/* Menú "Más acciones" para no amontonar botones pequeños */
+.actions-more .dropdown-menu { min-width: 200px; }
+
+/* Banner de elección activa (reutilizable) */
+.election-lock-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    background: #fef3c7;
+    color: #92400e;
+    border-radius: var(--border-radius);
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--warning-color);
+}
+.election-lock-banner i { font-size: 1.4rem; margin-top: .1rem; }
+
+/* Tarjetas de navegación rápida en dashboards (hover consistente) */
+.hover-card { transition: transform 0.2s, box-shadow 0.2s; }
+.hover-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+
+/* Indicador de progreso del flujo del elector */
+.vote-steps {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+    counter-reset: step;
+}
+.vote-steps li {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    font-size: .8rem;
+    color: #9ca3af;
+}
+.vote-steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: #e5eef0;
+    color: #6b7280;
+    font-weight: 700;
+    margin: 0 auto .4rem;
+}
+.vote-steps li::after {
+    content: "";
+    position: absolute;
+    top: 16px; left: calc(50% + 20px); right: calc(-50% + 20px);
+    height: 2px;
+    background: #e5eef0;
+    z-index: -1;
+}
+.vote-steps li:last-child::after { display: none; }
+.vote-steps li.done::before { background: var(--success-color); color: #fff; content: "✓"; }
+.vote-steps li.done::after { background: var(--success-color); }
+.vote-steps li.active { color: var(--secondary-color); font-weight: 700; }
+.vote-steps li.active::before { background: var(--main-gradient); color: #fff; }
+
+@media (max-width: 575.98px) {
+    .vote-steps li { font-size: .68rem; }
+    .vote-steps li::before { width: 26px; height: 26px; font-size: .8rem; }
+    .vote-steps li::after { top: 13px; }
+}

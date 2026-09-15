@@ -9,7 +9,9 @@
     --warning-color: #fbbf24;
     --info-color: #22d3ee;
 
-    --dark-color: #0b2530;
+    --bg-image-color: #f0fbffd0;
+
+    --dark-color: #181f22;
     --light-color: #f0fbff;
 
     --border-radius: 8px;
@@ -35,6 +37,11 @@ html {
 }
 
 body {
+    background-image: linear-gradient(var(--bg-image-color), var(--bg-image-color)), url('../images/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     margin-bottom: 60px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--light-color);

@@ -151,8 +151,12 @@ body {
     box-shadow: var(--box-shadow);
 }
 
-.table thead th {
+.table>thead {
     background: var(--main-gradient);
+}
+
+.table thead th {
+    background: #0f3d4c00;
     color: white;
     padding: 1rem;
     text-transform: uppercase;
@@ -160,8 +164,14 @@ body {
 }
 
 .table tbody tr:hover {
-    background: #e6fffb;
     transform: scale(1.01);
+}
+
+.table>:not(caption)>*>* {
+    padding: .5rem .5rem;
+    color: var(--text-color);
+    border-bottom-width: var(--bs-border-width);
+    box-shadow: inset 0 0 0 9999px var(--bs-table-bg-state, var(--bs-table-bg-type, var(--bs-table-accent-bg)));
 }
 
 /* FORMS */
@@ -203,7 +213,7 @@ body {
 .stat-card {
     background: white;
     border-radius: var(--border-radius);
-    padding: 1rem;
+    padding: 1rem 1.5rem;
     box-shadow: var(--box-shadow);
     transition: 0.3s;
 }
@@ -286,7 +296,7 @@ body {
 .page-header {
     background: var(--main-gradient);
     color: white;
-    padding: 2rem;
+    padding: 1rem 1.5rem;
     border-radius: var(--border-radius);
     margin-bottom: 2rem;
 }
@@ -541,10 +551,6 @@ input:focus-visible,
     --bs-table-bg: var(--surface-color);
     --bs-table-color: var(--text-color);
     --bs-table-border-color: var(--border-color);
-}
-
-[data-theme="dark"] .table tbody tr:hover {
-    background: #24434a;
 }
 
 [data-theme="dark"] .form-control,

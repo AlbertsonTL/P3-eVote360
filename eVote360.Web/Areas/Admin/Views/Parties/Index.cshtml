@@ -25,109 +25,122 @@
 {
     <div class="election-lock-banner">
         <i class="bi bi-exclamation-triangle-fill"></i>
-        <div><strong>Elección activa:</strong> no se pueden crear, editar ni cambiar el estado de partidos mientras haya una elección en proceso.</div>
-    </div>
-}
+        <div><strong>Elección activa:</strong> no se pueden crear, editar ni cambiar el estado de partidos mientras haya una
+            elección en proceso.</div>
+        </div>
+    }
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-<div class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="stat-card">
-            <div class="stat-card-icon warning">
-                <i class="bi bi-flag"></i>
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-card-icon warning">
+                    <i class="bi bi-flag"></i>
+                </div>
+                <div class="stat-card-title">Total Partidos: <span class="stat-card-value">@Model.Count</span></div>
             </div>
-            <div class="stat-card-title">Total Partidos: <span class="stat-card-value">@Model.Count</span></div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-card-icon success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="stat-card-title">Activos: <span class="stat-card-value">@Model.Count(p => p.IsActive)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-card-icon danger">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div class="stat-card-title">Inactivos: <span class="stat-card-value">@Model.Count(p => !p.IsActive)</span>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="stat-card">
-            <div class="stat-card-icon success">
-                <i class="bi bi-check-circle"></i>
-            </div>
-            <div class="stat-card-title">Activos: <span class="stat-card-value">@Model.Count(p => p.IsActive)</span></div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="stat-card">
-            <div class="stat-card-icon danger">
-                <i class="bi bi-x-circle"></i>
-            </div>
-            <div class="stat-card-title">Inactivos: <span class="stat-card-value">@Model.Count(p => !p.IsActive)</span></div>
-        </div>
-    </div>
-</div>
 
-<div class="card">
-    <div class="card-header">
-        <i class="bi bi-list-ul"></i> Listado de Partidos
-    </div>
-    <div class="card-body">
-        @if (Model.Any())
-        {
-            <div class="row g-4">
-                @foreach (var party in Model)
-                {
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card h-100 @(party.IsActive ? "border-success" : "border-danger")">
-                            <div class="card-body text-center">
-                                <img src="@party.LogoPath" alt="@party.Nombre" class="party-logo mb-3" style="width: 80px; height: 80px; object-fit: contain;">
-                                <h5 class="card-title">@party.Nombre</h5>
-                                <p class="text-muted mb-2"><strong>@party.Siglas</strong></p>
-                                @* <p class="card-text small text-muted">@party.Descripcion</p> *@
-                                @if (party.IsActive)
-                                {
-                                    <span class="badge bg-success mb-3">Activo</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger mb-3">Inactivo</span>
-                                }
-                                
-                                @if (!hasActiveElection)
-                                {
-                                    <div class="btn-group w-100" role="group">
-                                        <a asp-action="Edit" asp-route-id="@party.Id" class="btn btn-sm btn-warning">
-                                            <i class="bi bi-pencil"></i> Editar
-                                        </a>
-                                        <form asp-action="Toggle" asp-route-id="@party.Id" method="post" class="d-inline"
-                                              data-confirm="true"
-                                              data-confirm-title="@(party.IsActive ? "Confirmar desactivación" : "Confirmar activación")"
-                                              data-confirm-message="¿Está seguro que desea @(party.IsActive ? "desactivar" : "activar") el partido «@party.Nombre»?"
-                                              data-confirm-consequence="@(party.IsActive ? "El partido y sus candidatos dejarán de participar en el proceso electoral." : "El partido volverá a participar en el proceso electoral.")"
-                                              data-confirm-variant="@(party.IsActive ? "danger" : "success")"
-                                              data-confirm-ok="@(party.IsActive ? "Desactivar" : "Activar")">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm @(party.IsActive ? "btn-danger" : "btn-success")" aria-label="@(party.IsActive ? "Desactivar partido" : "Activar partido")" title="@(party.IsActive ? "Desactivar" : "Activar")">
-                                                <i class="bi bi-@(party.IsActive ? "x-circle" : "check-circle")"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                }
+    <div class="card">
+        <div class="card-header">
+            <i class="bi bi-list-ul"></i> Listado de Partidos
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var party in Model)
+                    {
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card h-100 @(party.IsActive ? "border-success" : "border-danger")">
+                                <div class="card-body text-center">
+                                    <img src="@party.LogoPath" alt="@party.Nombre" class="party-logo mb-3"
+                                         style="width: 80px; height: 80px; object-fit: contain;">
+                                    <h5 class="card-title">@party.Nombre</h5>
+                                    <p class="text-muted mb-2"><strong>@party.Siglas</strong>
+                                        @* <p class="card-text small text-muted">@party.Descripcion</p> *@
+                                        @if (party.IsActive)
+                                        {
+                                            <span class="badge bg-success mb-3">Activo</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger mb-3">Inactivo</span>
+                                        }
+                                    </p>
+                                    
+                                    @if (!hasActiveElection)
+                                    {
+                                        <div class="w-100" role="group">
+                                            <a asp-action="Edit" asp-route-id="@party.Id" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-pencil-fill"></i> Editar
+                                            </a>
+                                            <form asp-action="Toggle" asp-route-id="@party.Id" method="post" class="d-inline"
+                                                  data-confirm="true"
+                                                  data-confirm-title="@(party.IsActive ? "Confirmar desactivación" : "Confirmar activación")"
+                                                  data-confirm-message="¿Está seguro que desea @(party.IsActive ? "desactivar" : "activar") el puesto «@(party.Nombre)»?"
+                                                  data-confirm-consequence="@(party.IsActive ? "Este puesto dejará de estar disponible para nuevas elecciones y asignaciones." : "Este puesto volverá a estar disponible para elecciones y asignaciones.")"
+                                                  data-confirm-variant="@(party.IsActive ? "danger" : "success")"
+                                                  data-confirm-ok="@(party.IsActive ? "Desactivar" : "Activar")">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit"
+                                                        class="btn btn-sm @(party.IsActive ? "btn-danger" : "btn-success")">
+                                                    <i class="bi bi-@(party.IsActive ? "x-circle-fill" : "check-circle-fill")"></i>
+                                                    @(party.IsActive ? "Desactivar" : "Activar")
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-secondary w-100" disabled>
+                                            <i class="bi bi-lock-fill"></i> Acciones Bloqueadas
+                                        </button>
+                                    }
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
-        }
-        else
-        {
-            <div class="empty-state">
-                <i class="bi bi-flag"></i>
-                <h5>No hay partidos registrados</h5>
-                <p>Los partidos que registres aparecerán aquí.</p>
-                @if (!hasActiveElection)
-                {
-                    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i> Crear partido</a>
-                }
-            </div>
-        }
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="bi bi-flag"></i>
+                    <h5>No hay partidos registrados</h5>
+                    <p>Los partidos que registres aparecerán aquí.</p>
+                    @if (!hasActiveElection)
+                    {
+                        <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle-fill"></i> Crear partido</a>
+                    }
+                </div>
+            }
+        </div>
     </div>
-</div>
 

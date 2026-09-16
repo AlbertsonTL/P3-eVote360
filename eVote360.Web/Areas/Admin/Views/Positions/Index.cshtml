@@ -108,8 +108,8 @@
                                 
                                 @if (!hasActiveElection)
                                 {
-                                    <div class="btn-group w-100" role="group">
-                                        <a asp-action="Edit" asp-route-id="@position.Id" class="btn btn-warning">
+                                    <div class="w-100" role="group">
+                                        <a asp-action="Edit" asp-route-id="@position.Id" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-fill"></i> Editar
                                         </a>
                                         <form asp-action="Toggle" asp-route-id="@position.Id" method="post" class="d-inline"
@@ -120,7 +120,7 @@
                                               data-confirm-variant="@(position.IsActive ? "danger" : "success")"
                                               data-confirm-ok="@(position.IsActive ? "Desactivar" : "Activar")">
                                             @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn @(position.IsActive ? "btn-danger" : "btn-success")">
+                                            <button type="submit" class="btn btn-sm @(position.IsActive ? "btn-danger" : "btn-success")">
                                                 <i class="bi bi-@(position.IsActive ? "x-circle-fill" : "check-circle-fill")"></i>
                                                 @(position.IsActive ? "Desactivar" : "Activar")
                                             </button>

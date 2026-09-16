@@ -4,6 +4,35 @@
 (function () {
     'use strict';
 
+    // Mantiene la preferencia del usuario entre páginas y sesiones.
+    const savedTheme = localStorage.getItem('evote-theme');
+    if (savedTheme === 'dark' || savedTheme === 'light') {
+        document.documentElement.dataset.theme = savedTheme;
+    }
+
+    function updateThemeToggle(theme) {
+        document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
+            const isDark = theme === 'dark';
+            button.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+            button.setAttribute('title', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
+            button.innerHTML = '<i class="bi ' + (isDark ? 'bi-sun-fill' : 'bi-moon-stars-fill') + '" aria-hidden="true"></i>' +
+                '<span class="d-none d-md-inline ms-1">' + (isDark ? 'Modo claro' : 'Modo oscuro') + '</span>';
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const theme = document.documentElement.dataset.theme || 'light';
+        updateThemeToggle(theme);
+        document.querySelectorAll('[data-theme-toggle]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                const nextTheme = (document.documentElement.dataset.theme || 'light') === 'dark' ? 'light' : 'dark';
+                document.documentElement.dataset.theme = nextTheme;
+                localStorage.setItem('evote-theme', nextTheme);
+                updateThemeToggle(nextTheme);
+            });
+        });
+    });
+
     // ---------------------------------------------------------------
     // Auto-hide de banners de alerta (TempData Success/Error) tras 6s
     // ---------------------------------------------------------------

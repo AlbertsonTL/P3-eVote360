@@ -36,6 +36,13 @@
                             </li>
                         </ul>
                         <ul class="navbar-nav">
+                            <li class="nav-item d-flex align-items-center me-2">
+                                <button type="button" class="btn theme-toggle" data-theme-toggle
+                                        aria-label="Activar modo oscuro" title="Activar modo oscuro">
+                                    <i class="bi bi-moon-stars-fill" aria-hidden="true"></i>
+                                    <span class="d-none d-md-inline ms-1">Modo oscuro</span>
+                                </button>
+                            </li>
                             @if (Context.Session.GetInt32("UserId") != null || Context.Session.GetInt32("CitizenId") !=
                         null)
                             {

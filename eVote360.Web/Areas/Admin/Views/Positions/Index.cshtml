@@ -57,8 +57,7 @@
             <div class="stat-card-icon primary">
                 <i class="bi bi-briefcase"></i>
             </div>
-            <div class="stat-card-title">Total Puestos</div>
-            <div class="stat-card-value">@Model.Count</div>
+            <div class="stat-card-title">Total Puestos: <span class="stat-card-value">@Model.Count</span></div>
         </div>
     </div>
     <div class="col-md-4">
@@ -66,8 +65,7 @@
             <div class="stat-card-icon success">
                 <i class="bi bi-check-circle"></i>
             </div>
-            <div class="stat-card-title">Activos</div>
-            <div class="stat-card-value">@Model.Count(p => p.IsActive)</div>
+            <div class="stat-card-title">Activos: <span class="stat-card-value">@Model.Count(p => p.IsActive)</span></div>
         </div>
     </div>
     <div class="col-md-4">
@@ -75,8 +73,7 @@
             <div class="stat-card-icon danger">
                 <i class="bi bi-x-circle"></i>
             </div>
-            <div class="stat-card-title">Inactivos</div>
-            <div class="stat-card-value">@Model.Count(p => !p.IsActive)</div>
+            <div class="stat-card-title">Inactivos: <span class="stat-card-value">@Model.Count(p => !p.IsActive)</span></div>
         </div>
     </div>
 </div>

@@ -203,7 +203,7 @@ body {
 .stat-card {
     background: white;
     border-radius: var(--border-radius);
-    padding: 1.5rem;
+    padding: 1rem;
     box-shadow: var(--box-shadow);
     transition: 0.3s;
 }
@@ -229,13 +229,13 @@ body {
 .stat-card-icon.danger { background: var(--danger-color); color:white; }
 
 .stat-card-title {
-    font-size: 0.85rem;
+    font-size: 1rem;
     color: #6b7280;
     text-transform: uppercase;
 }
 
 .stat-card-value {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
 }
 
@@ -612,10 +612,6 @@ input:focus-visible,
 
 [data-theme="dark"] .app-nav-offcanvas .nav-link:hover {
     background: var(--surface-muted);
-}
-
-[data-theme="dark"] .navbar-collapse {
-    background: rgba(8, 18, 24, .35);
 }
 
 [data-theme="dark"] .app-nav-offcanvas .border-bottom,

@@ -43,8 +43,7 @@
             <div class="stat-card-icon warning">
                 <i class="bi bi-flag"></i>
             </div>
-            <div class="stat-card-title">Total Partidos</div>
-            <div class="stat-card-value">@Model.Count</div>
+            <div class="stat-card-title">Total Partidos: <span class="stat-card-value">@Model.Count</span></div>
         </div>
     </div>
     <div class="col-md-4">
@@ -52,8 +51,7 @@
             <div class="stat-card-icon success">
                 <i class="bi bi-check-circle"></i>
             </div>
-            <div class="stat-card-title">Activos</div>
-            <div class="stat-card-value">@Model.Count(p => p.IsActive)</div>
+            <div class="stat-card-title">Activos: <span class="stat-card-value">@Model.Count(p => p.IsActive)</span></div>
         </div>
     </div>
     <div class="col-md-4">
@@ -61,8 +59,7 @@
             <div class="stat-card-icon danger">
                 <i class="bi bi-x-circle"></i>
             </div>
-            <div class="stat-card-title">Inactivos</div>
-            <div class="stat-card-value">@Model.Count(p => !p.IsActive)</div>
+            <div class="stat-card-title">Inactivos: <span class="stat-card-value">@Model.Count(p => !p.IsActive)</span></div>
         </div>
     </div>
 </div>
@@ -83,7 +80,7 @@
                                 <img src="@party.LogoPath" alt="@party.Nombre" class="party-logo mb-3" style="width: 80px; height: 80px; object-fit: contain;">
                                 <h5 class="card-title">@party.Nombre</h5>
                                 <p class="text-muted mb-2"><strong>@party.Siglas</strong></p>
-                                <p class="card-text small text-muted">@party.Descripcion</p>
+                                @* <p class="card-text small text-muted">@party.Descripcion</p> *@
                                 @if (party.IsActive)
                                 {
                                     <span class="badge bg-success mb-3">Activo</span>

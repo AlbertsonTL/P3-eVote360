@@ -39,22 +39,19 @@
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-card-icon primary"><i class="bi bi-card-checklist"></i></div>
-            <div class="stat-card-title">Total Elecciones</div>
-            <div class="stat-card-value">@Model.Count</div>
+            <div class="stat-card-title">Total Elecciones: <span class="stat-card-value">@Model.Count</span></div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-card-icon success"><i class="bi bi-circle-fill"></i></div>
-            <div class="stat-card-title">En Proceso</div>
-            <div class="stat-card-value">@Model.Count(e => e.EsActiva)</div>
+            <div class="stat-card-title">En Proceso: <span class="stat-card-value">@Model.Count(e => e.EsActiva)</span></div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-card-icon warning"><i class="bi bi-check-circle-fill"></i></div>
-            <div class="stat-card-title">Finalizadas</div>
-            <div class="stat-card-value">@Model.Count(e => !e.EsActiva)</div>
+            <div class="stat-card-title">Finalizadas: <span class="stat-card-value">@Model.Count(e => !e.EsActiva)</span></div>
         </div>
     </div>
 </div>

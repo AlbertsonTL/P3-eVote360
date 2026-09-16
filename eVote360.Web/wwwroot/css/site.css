@@ -58,7 +58,7 @@ body {
 /* NAVBAR */
 .navbar {
     box-shadow: var(--box-shadow);
-    background: var(--main-gradient);
+    background: var(--main-gradient) !important;
 }
 
 .navbar-brand {
@@ -76,6 +76,23 @@ body {
 .navbar-light .navbar-nav .nav-link:hover {
     color: white !important;
     transform: translateY(-2px);
+}
+
+.navbar-light .navbar-toggler {
+    border-color: rgba(255,255,255,.55);
+}
+
+.navbar-light .navbar-toggler-icon {
+    filter: brightness(0) invert(1);
+}
+
+@media (max-width: 575.98px) {
+    .navbar-collapse {
+        margin: .5rem -.75rem -.5rem;
+        padding: .75rem;
+        background: rgba(15, 61, 76, .3);
+        border-radius: var(--border-radius);
+    }
 }
 
 /* CARDS */
@@ -351,6 +368,7 @@ input:focus-visible,
    ========================================================= */
 .app-nav {
     box-shadow: var(--box-shadow);
+    background: var(--main-gradient) !important;
 }
 .app-nav .navbar-brand { color: #fff !important; font-weight: 700; }
 .app-nav .nav-link {
@@ -367,12 +385,35 @@ input:focus-visible,
     font-weight: 700;
 }
 .app-nav .navbar-user { color: rgba(255,255,255,0.85); font-size: .9rem; }
+.app-nav > .container-fluid > .nav-link {
+    color: #fff !important;
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    padding: .5rem;
+}
+.app-nav > .container-fluid > .nav-link:hover {
+    background: rgba(255,255,255,.16);
+}
 
 /* En móvil, el menú de área se muestra como offcanvas lateral */
-.app-nav-offcanvas { max-width: 300px; }
+.app-nav-offcanvas {
+    max-width: 300px;
+    background: var(--surface-color);
+}
+.app-nav-offcanvas .offcanvas-header {
+    background: var(--main-gradient) !important;
+}
 .app-nav-offcanvas .nav-link { color: var(--dark-color); padding: .8rem 1rem; border-radius: var(--border-radius); }
 .app-nav-offcanvas .nav-link:hover { background: var(--light-color); }
 .app-nav-offcanvas .nav-link.active { background: var(--primary-color); color: #fff !important; }
+.app-nav-offcanvas .nav-link.text-danger {
+    color: #dc3545 !important;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+.app-nav-offcanvas .nav-link.text-danger:hover {
+    background: rgba(220, 53, 69, .12);
+}
 
 /* =========================================================
    ESTADOS VACÍOS
@@ -571,6 +612,10 @@ input:focus-visible,
 
 [data-theme="dark"] .app-nav-offcanvas .nav-link:hover {
     background: var(--surface-muted);
+}
+
+[data-theme="dark"] .navbar-collapse {
+    background: rgba(8, 18, 24, .35);
 }
 
 [data-theme="dark"] .app-nav-offcanvas .border-bottom,

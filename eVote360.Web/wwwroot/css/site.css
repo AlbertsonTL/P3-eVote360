@@ -13,6 +13,12 @@
 
     --dark-color: #181f22;
     --light-color: #f0fbff;
+    --page-bg: #f0fbff;
+    --surface-color: #ffffff;
+    --surface-muted: #f8fafb;
+    --text-color: #181f22;
+    --muted-text-color: #6b7280;
+    --border-color: #cde5ea;
 
     --border-radius: 8px;
     --box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
@@ -44,8 +50,9 @@ body {
     background-attachment: fixed;
     margin-bottom: 60px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--light-color);
-    color: var(--dark-color);
+    background-color: var(--page-bg);
+    color: var(--text-color);
+    transition: background-color .2s ease, color .2s ease;
 }
 
 /* NAVBAR */
@@ -253,9 +260,9 @@ body {
     position: absolute;
     width: 100%;
     line-height: 60px;
-    background: #e6f7fa;
+    background: var(--surface-muted);
     text-align: center;
-    color: var(--secondary-color);
+    color: var(--text-color);
 }
 
 /* PAGE HEADER */
@@ -451,6 +458,142 @@ input:focus-visible,
     .modal-footer { flex-direction: column-reverse; }
     .modal-footer > .btn { width: 100%; margin: 0; }
     .modal-dialog { margin: .75rem; }
+}
+
+/* =========================================================
+   MODO OSCURO
+   ========================================================= */
+[data-theme="dark"] {
+    --bg-image-color: rgba(8, 18, 24, .92);
+    --page-bg: #0d171c;
+    --surface-color: #17262d;
+    --surface-muted: #20333b;
+    --text-color: #e5f3f5;
+    --muted-text-color: #a9bec3;
+    --border-color: #38515a;
+    --light-color: #20333b;
+    --dark-color: #e5f3f5;
+    --box-shadow: 0 1px 3px rgba(0, 0, 0, .35), 0 8px 20px rgba(0, 0, 0, .2);
+}
+
+[data-theme="dark"] body {
+    background-color: var(--page-bg);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .voting-card,
+[data-theme="dark"] .data-card,
+[data-theme="dark"] .table,
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .offcanvas {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .card-header {
+    color: #fff;
+}
+
+[data-theme="dark"] .table {
+    --bs-table-bg: var(--surface-color);
+    --bs-table-color: var(--text-color);
+    --bs-table-border-color: var(--border-color);
+}
+
+[data-theme="dark"] .table tbody tr:hover {
+    background: #24434a;
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+    background-color: #102027;
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: #91aab0;
+}
+
+[data-theme="dark"] .form-select option {
+    background-color: #102027;
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .form-label,
+[data-theme="dark"] .stat-card-title,
+[data-theme="dark"] .data-card-row .label,
+[data-theme="dark"] .empty-state p,
+[data-theme="dark"] .text-muted {
+    color: var(--muted-text-color) !important;
+}
+
+[data-theme="dark"] .text-dark,
+[data-theme="dark"] .empty-state h5,
+[data-theme="dark"] .vote-steps li.active {
+    color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-body,
+[data-theme="dark"] .modal-footer {
+    background-color: var(--surface-color);
+}
+
+[data-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+[data-theme="dark"] .data-card-row {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .candidate-card {
+    border-color: var(--border-color);
+    background-color: var(--surface-color);
+}
+
+[data-theme="dark"] .candidate-card:hover,
+[data-theme="dark"] .candidate-card.selected {
+    background: #173d42;
+}
+
+[data-theme="dark"] .party-logo,
+[data-theme="dark"] .candidate-photo {
+    border-color: var(--surface-color);
+}
+
+[data-theme="dark"] .app-nav-offcanvas .nav-link {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .app-nav-offcanvas .nav-link:hover {
+    background: var(--surface-muted);
+}
+
+[data-theme="dark"] .app-nav-offcanvas .border-bottom,
+[data-theme="dark"] .app-nav-offcanvas .border-top {
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .spinner-overlay {
+    background: rgba(13, 23, 28, .9);
+}
+
+.theme-toggle {
+    border: 1px solid rgba(255, 255, 255, .35);
+    color: #fff;
+    background: rgba(0, 0, 0, .12);
+    min-height: 38px;
+    padding: .35rem .7rem;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+    color: #fff;
+    background: rgba(255, 255, 255, .18);
 }
 
 /* =========================================================

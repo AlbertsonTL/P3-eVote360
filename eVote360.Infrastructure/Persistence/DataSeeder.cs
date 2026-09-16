@@ -62,9 +62,9 @@ public static class DataSeeder
         // Partidos
         var partidos = new[]
         {
-            ("Partido Revolucionario Moderno","Partido político dominicano","PRM","~/images/logos/prm.png"),
-            ("Partido de la Liberación Dominicana","Partido político dominicano","PLD","~/images/logos/pld.png"),
-            ("Fuerza del Pueblo","Partido político dominicano","FP","~/images/logos/fp.png"),
+            ("Partido Revolucionario Moderno","Partido político dominicano","PRM","/images/parties/prm.png"),
+            ("Partido de la Liberación Dominicana","Partido político dominicano","PLD","/images/parties/pld.png"),
+            ("Fuerza del Pueblo","Partido político dominicano","FP","/images/parties/fp.png"),
         };
 
         foreach (var p in partidos)

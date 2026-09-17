@@ -117,7 +117,7 @@ body {
     padding: 1rem 1.5rem;
 }
 
-.card-body { padding: 1.5rem; }
+.card-body { padding: 1rem 1.5rem; }
 
 /* BUTTONS */
 .btn {

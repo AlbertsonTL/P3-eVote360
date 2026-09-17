@@ -15,8 +15,8 @@
             const isDark = theme === 'dark';
             button.setAttribute('aria-label', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
             button.setAttribute('title', isDark ? 'Activar modo claro' : 'Activar modo oscuro');
-            button.innerHTML = '<i class="bi ' + (isDark ? 'bi-sun-fill' : 'bi-moon-stars-fill') + '" aria-hidden="true"></i>' +
-                '<span class="d-none d-md-inline ms-1">' + (isDark ? 'Modo claro' : 'Modo oscuro') + '</span>';
+            button.innerHTML = '<i class="bi ' + (isDark ? 'bi-sun-fill' : 'bi-moon-stars-fill') + '" aria-hidden="true"></i>'
+            //'<span class="d-none d-md-inline ms-1">' + (isDark ? 'Modo claro' : 'Modo oscuro') + '</span>';
         });
     }
 

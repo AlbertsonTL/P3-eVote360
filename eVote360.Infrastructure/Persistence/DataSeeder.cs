@@ -4,8 +4,16 @@ using eVote360.Domain.Entities.Citizen;
 using eVote360.Domain.Entities.Party;
 using eVote360.Domain.Entities.Position;
 using eVote360.Domain.Entities.Assignments;
+using eVote360.Domain.Enums;
 using eVote360.Domain.ValueObjects;
 using eVote360.Infrastructure.Security;
+
+// Alias de tipo: las clases Vote/VoteItem/Election viven en un namespace que
+// termina con su mismo nombre (eVote360.Domain.Entities.Vote.Vote), lo que
+// generaría ambigüedad al usarlas sin calificar.
+using ElectionEntity = eVote360.Domain.Entities.Election.Election;
+using VoteEntity = eVote360.Domain.Entities.Vote.Vote;
+using VoteItemEntity = eVote360.Domain.Entities.Vote.VoteItem;
 
 namespace eVote360.Infrastructure.Persistence;
 
@@ -207,6 +215,119 @@ public static class DataSeeder
 
         await context.SaveChangesAsync();
 
+
+        // =========================================================
+        // ELECCIÓN CON VOTACIÓN COMPLETA Y RESULTADOS
+        // Se siembra una elección ya FINALIZADA con votos reales, de modo
+        // que la pantalla "Ver Resultados" muestre un conteo con ganadores.
+        // Resultado buscado:
+        //   Presidente      -> Luis Abinader Corona (PRM)
+        //   Vicepresidente  -> Raquel Peña (PRM)
+        //   Alcalde         -> Abel Martínez (PLD)  <- gana otro partido
+        // =========================================================
+        const string nombreEleccion = "Elecciones Generales 2024";
+
+        if (!context.Elections.Any(x => x.Nombre == nombreEleccion))
+        {
+            var eleccion = new ElectionEntity
+            {
+                Nombre = nombreEleccion,
+                FechaRealizacion = new DateTime(2024, 5, 19),
+                Estado = ElectionState.Finalizada,
+                CreatedAt = DateTime.UtcNow
+            };
+            context.Elections.Add(eleccion);
+            await context.SaveChangesAsync();
+
+            var puestoPte  = context.Positions.First(x => x.Nombre == "Presidente");
+            var puestoVice = context.Positions.First(x => x.Nombre == "Vicepresidente");
+            var puestoAlc  = context.Positions.First(x => x.Nombre == "Alcalde");
+
+            // Candidatos por puesto
+            var abinader = context.Candidates.First(x => x.Apellido == "Abinader Corona");
+            var medina   = context.Candidates.First(x => x.Apellido == "Medina");
+            var leonel   = context.Candidates.First(x => x.Nombre == "Leonel" && x.Apellido == "Fernández");
+
+            var raquel   = context.Candidates.First(x => x.Apellido == "Peña");
+            var margarita= context.Candidates.First(x => x.Apellido == "Cedeño");
+            var omar     = context.Candidates.First(x => x.Nombre == "Omar");
+
+            var carolina = context.Candidates.First(x => x.Apellido == "Mejía");
+            var abel     = context.Candidates.First(x => x.Apellido == "Martínez");
+            var radhames = context.Candidates.First(x => x.Nombre == "Radhamés");
+
+            // Construye una lista de "papeletas" repitiendo cada opción tantas
+            // veces como votos deba recibir. null = voto por "Ninguno".
+            static List<eVote360.Domain.Entities.Candidate.Candidate?> Papeletas(
+                params (eVote360.Domain.Entities.Candidate.Candidate? candidato, int votos)[] reparto)
+            {
+                var lista = new List<eVote360.Domain.Entities.Candidate.Candidate?>();
+                foreach (var (candidato, votos) in reparto)
+                    for (int i = 0; i < votos; i++)
+                        lista.Add(candidato);
+                return lista;
+            }
+
+            // 40 votantes de los 50 ciudadanos del padrón (abstención realista)
+            var votantes = context.Citizens.OrderBy(x => x.Id).Take(40).ToList();
+
+            var votosPresidente = Papeletas(
+                (abinader, 20),   // PRM gana
+                (medina,   12),
+                (leonel,    7),
+                (null,      1));  // Ninguno
+
+            var votosVice = Papeletas(
+                (raquel,   19),   // PRM gana
+                (margarita,13),
+                (omar,      7),
+                (null,      1));
+
+            var votosAlcalde = Papeletas(
+                (abel,     18),   // PLD gana -> partido distinto al presidencial
+                (carolina, 14),
+                (radhames,  7),
+                (null,      1));
+
+            var random = new Random(2024); // semilla fija: resultados reproducibles
+            votosPresidente = votosPresidente.OrderBy(_ => random.Next()).ToList();
+            votosVice       = votosVice.OrderBy(_ => random.Next()).ToList();
+            votosAlcalde    = votosAlcalde.OrderBy(_ => random.Next()).ToList();
+
+            for (int i = 0; i < votantes.Count; i++)
+            {
+                var voto = new VoteEntity
+                {
+                    CitizenId = votantes[i].Id,
+                    ElectionId = eleccion.Id,
+                    FechaVoto = eleccion.FechaRealizacion.AddHours(8).AddMinutes(i * 7)
+                };
+
+                voto.VoteItems.Add(new VoteItemEntity
+                {
+                    PositionId = puestoPte.Id,
+                    CandidateId = votosPresidente[i]?.Id,
+                    PartyId = votosPresidente[i]?.PartyId
+                });
+                voto.VoteItems.Add(new VoteItemEntity
+                {
+                    PositionId = puestoVice.Id,
+                    CandidateId = votosVice[i]?.Id,
+                    PartyId = votosVice[i]?.PartyId
+                });
+                voto.VoteItems.Add(new VoteItemEntity
+                {
+                    PositionId = puestoAlc.Id,
+                    CandidateId = votosAlcalde[i]?.Id,
+                    PartyId = votosAlcalde[i]?.PartyId
+                });
+
+                context.Votes.Add(voto);
+            }
+
+            await context.SaveChangesAsync();
+        }
+
         Console.WriteLine("====================================================");
         Console.WriteLine("  Base de datos inicializada correctamente");
         Console.WriteLine("====================================================");
@@ -215,8 +336,12 @@ public static class DataSeeder
         Console.WriteLine("  medina / Dirigente123! (PLD)");
         Console.WriteLine("  leonel / Dirigente123! (FP)");
         Console.WriteLine("  Elector: 001-1234567-1 (Albertson Terrero López)");
+        Console.WriteLine("----------------------------------------------------");
+        Console.WriteLine("  Elección sembrada: Elecciones Generales 2024 (Finalizada)");
+        Console.WriteLine("  40 votantes de 50 ciudadanos del padrón");
+        Console.WriteLine("  Presidente     -> Luis Abinader Corona (PRM)  20 votos");
+        Console.WriteLine("  Vicepresidente -> Raquel Peña (PRM)           19 votos");
+        Console.WriteLine("  Alcalde        -> Abel Martínez (PLD)         18 votos");
         Console.WriteLine("====================================================\n");
-        Console.WriteLine("============== Debes quitar esta parte =============\n");
-
     }
 }

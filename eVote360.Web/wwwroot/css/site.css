@@ -9,7 +9,7 @@
     --warning-color: #fbbf24;
     --info-color: #22d3ee;
 
-    --bg-image-color: #f0fbffd0;
+    --bg-body: rgba(240, 242, 245, .85);
 
     --dark-color: #181f22;
     --light-color: #f0fbff;
@@ -43,7 +43,7 @@ html {
 }
 
 body {
-    background-image: linear-gradient(var(--bg-image-color), var(--bg-image-color)), url('../images/background.jpg');
+    background-image: linear-gradient(var(--bg-body), var(--bg-body)), url('../images/background.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -515,7 +515,7 @@ input:focus-visible,
    MODO OSCURO
    ========================================================= */
 [data-theme="dark"] {
-    --bg-image-color: rgba(8, 18, 24, .92);
+    --bg-body: rgba(8, 12, 22, .78);
     --page-bg: #0d171c;
     --surface-color: #17262d;
     --surface-muted: #20333b;

@@ -72,7 +72,7 @@ public class CandidatosController : Controller
         var partyId = GetPartyId();
         if (!partyId.HasValue) return RedirectToAction("Index", "Login", new { area = "" });
 
-        string fotoPath = "/images/candidates/default.png";
+        string fotoPath = "/images/candidates/default.svg";
         if (model.Foto != null)
             fotoPath = await SaveFotoAsync(model.Foto);
 

@@ -110,6 +110,19 @@ public static class DataSeeder
 
 
         // Candidatos
+        var fotosCandidatos = new Dictionary<(string Nombre, string Apellido), string>
+        {
+            [("Luis", "Abinader Corona")] = "/images/candidates/luis-abinader.jpg",
+            [("Raquel", "Peña")] = "/images/candidates/raquel-pena.jpg",
+            [("Carolina", "Mejía")] = "/images/candidates/carolina-mejia.jpg",
+            [("Danilo", "Medina")] = "/images/candidates/danilo-medina.jpg",
+            [("Margarita", "Cedeño")] = "/images/candidates/margarita-cedeno.jpg",
+            [("Abel", "Martínez")] = "/images/candidates/abel-martinez.jpg",
+            [("Leonel", "Fernández")] = "/images/candidates/leonel-fernandez.jpg",
+            [("Omar", "Fernández")] = "/images/candidates/omar-fernandez.jpg",
+            [("Radhamés", "Jiménez")] = "/images/candidates/default.svg"
+        };
+
         if (!context.Candidates.Any())
         {
             var prm = context.Parties.First(x => x.Siglas == "PRM");
@@ -123,23 +136,33 @@ public static class DataSeeder
             context.Candidates.AddRange(new[]
             {
                 // PRM
-                new Candidate { Nombre="Luis",Apellido="Abinader Corona",PartyId=prm.Id,PositionId=pte.Id,IsActive=true },
-                new Candidate { Nombre="Raquel",Apellido="Peña",PartyId=prm.Id,PositionId=vice.Id,IsActive=true },
-                new Candidate { Nombre="Carolina",Apellido="Mejía",PartyId=prm.Id,PositionId=alc.Id,IsActive=true },
+                new Candidate { Nombre="Luis",Apellido="Abinader Corona",FotoPath=fotosCandidatos[("Luis", "Abinader Corona")],PartyId=prm.Id,PositionId=pte.Id,IsActive=true },
+                new Candidate { Nombre="Raquel",Apellido="Peña",FotoPath=fotosCandidatos[("Raquel", "Peña")],PartyId=prm.Id,PositionId=vice.Id,IsActive=true },
+                new Candidate { Nombre="Carolina",Apellido="Mejía",FotoPath=fotosCandidatos[("Carolina", "Mejía")],PartyId=prm.Id,PositionId=alc.Id,IsActive=true },
 
                 // PLD
-                new Candidate { Nombre="Danilo",Apellido="Medina",PartyId=pld.Id,PositionId=pte.Id,IsActive=true },
-                new Candidate { Nombre="Margarita",Apellido="Cedeño",PartyId=pld.Id,PositionId=vice.Id,IsActive=true },
-                new Candidate { Nombre="Abel",Apellido="Martínez",PartyId=pld.Id,PositionId=alc.Id,IsActive=true },
+                new Candidate { Nombre="Danilo",Apellido="Medina",FotoPath=fotosCandidatos[("Danilo", "Medina")],PartyId=pld.Id,PositionId=pte.Id,IsActive=true },
+                new Candidate { Nombre="Margarita",Apellido="Cedeño",FotoPath=fotosCandidatos[("Margarita", "Cedeño")],PartyId=pld.Id,PositionId=vice.Id,IsActive=true },
+                new Candidate { Nombre="Abel",Apellido="Martínez",FotoPath=fotosCandidatos[("Abel", "Martínez")],PartyId=pld.Id,PositionId=alc.Id,IsActive=true },
 
                 // FP
-                new Candidate { Nombre="Leonel",Apellido="Fernández",PartyId=fp.Id,PositionId=pte.Id,IsActive=true },
-                new Candidate { Nombre="Omar",Apellido="Fernández",PartyId=fp.Id,PositionId=vice.Id,IsActive=true },
-                new Candidate { Nombre="Radhamés",Apellido="Jiménez",PartyId=fp.Id,PositionId=alc.Id,IsActive=true },
+                new Candidate { Nombre="Leonel",Apellido="Fernández",FotoPath=fotosCandidatos[("Leonel", "Fernández")],PartyId=fp.Id,PositionId=pte.Id,IsActive=true },
+                new Candidate { Nombre="Omar",Apellido="Fernández",FotoPath=fotosCandidatos[("Omar", "Fernández")],PartyId=fp.Id,PositionId=vice.Id,IsActive=true },
+                new Candidate { Nombre="Radhamés",Apellido="Jiménez",FotoPath=fotosCandidatos[("Radhamés", "Jiménez")],PartyId=fp.Id,PositionId=alc.Id,IsActive=true },
             });
 
             await context.SaveChangesAsync();
         }
+
+        foreach (var candidato in context.Candidates)
+        {
+            if (string.IsNullOrWhiteSpace(candidato.FotoPath) &&
+                fotosCandidatos.TryGetValue((candidato.Nombre, candidato.Apellido), out var fotoPath))
+            {
+                candidato.FotoPath = fotoPath;
+            }
+        }
+        await context.SaveChangesAsync();
 
 
         // Ciudadanos

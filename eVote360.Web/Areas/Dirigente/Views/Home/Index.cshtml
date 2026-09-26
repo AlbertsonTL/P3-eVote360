@@ -31,7 +31,8 @@
             }
             else
             {
-                <div class="bg-primary rounded d-flex align-items-center justify-content-center" style="height:80px;width:80px;">
+                <div class="bg-primary rounded d-flex align-items-center justify-content-center"
+                     style="height:80px;width:80px;">
                     <i class="bi bi-flag-fill text-white fs-2"></i>
                 </div>
             }
@@ -45,41 +46,46 @@
 
 <!-- Stats Row -->
 <div class="row g-4 mb-4 slide-up">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-card-icon success"><i class="bi bi-check-circle-fill"></i></div>
-            <div class="stat-card-title">Candidatos Activos</div>
-            <div class="stat-card-value">@ViewBag.CandidatosActivos</div>
+            <div class="stat-card-title">Candidatos Activos: <span
+                class="stat-card-value">@ViewBag.CandidatosActivos</span></div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="stat-card">
             <div class="stat-card-icon danger"><i class="bi bi-x-circle-fill"></i></div>
-            <div class="stat-card-title">Candidatos Inactivos</div>
-            <div class="stat-card-value">@ViewBag.CandidatosInactivos</div>
+            <div class="stat-card-title">Candidatos Inactivos: <span
+                class="stat-card-value">@ViewBag.CandidatosInactivos</span></div>
+            </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="stat-card">
-            <div class="stat-card-icon primary"><i class="bi bi-handshake-fill"></i></div>
-            <div class="stat-card-title">Alianzas Activas</div>
-            <div class="stat-card-value">@ViewBag.AlianzasActivas</div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="stat-card">
-            <div class="stat-card-icon warning"><i class="bi bi-clock-fill"></i></div>
-            <div class="stat-card-title">Solicitudes Pendientes</div>
-            <div class="stat-card-value">@ViewBag.SolicitudesPendientes</div>
+            <div class="stat-card-icon warning"><i class="bi bi-award-fill"></i></div>
+            <div class="stat-card-title">Candidatos Asignados a Puestos: <span
+                class="stat-card-value">@ViewBag.PuestosAsignados</span></div>
+            </div>
         </div>
     </div>
 </div>
+
 <div class="row g-4 mb-4">
     <div class="col-md-6">
         <div class="stat-card">
-            <div class="stat-card-icon warning"><i class="bi bi-award-fill"></i></div>
-            <div class="stat-card-title">Candidatos Asignados a Puesto</div>
-            <div class="stat-card-value">@ViewBag.PuestosAsignados</div>
+            <div class="stat-card-icon primary"><i class="bi bi-person-plus-fill"></i></div>
+            <div class="stat-card-title">Alianzas Activas: <span class="stat-card-value">@ViewBag.AlianzasActivas</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="stat-card">
+            <div class="stat-card-icon warning"><i class="bi bi-clock-fill"></i></div>
+            <div class="stat-card-title">Solicitudes Pendientes: <span
+                class="stat-card-value">@ViewBag.SolicitudesPendientes</span></div>
+            </div>
         </div>
     </div>
 </div>
@@ -90,7 +96,7 @@
         <a asp-area="Dirigente" asp-controller="Candidatos" asp-action="Index" class="text-decoration-none">
             <div class="card h-100 hover-card">
                 <div class="card-body text-center p-4">
-                    <div class="display-4 text-primary mb-3"><i class="bi bi-people-fill"></i></div>
+                    <div class="display-4 text-primary"><i class="bi bi-people-fill"></i></div>
                     <h4>Mis Candidatos</h4>
                     <p class="text-muted">Administre los candidatos de su partido político</p>
                     <span class="btn btn-outline-primary">Gestionar Candidatos</span>
@@ -102,7 +108,7 @@
         <a asp-area="Dirigente" asp-controller="CandidatoPuesto" asp-action="Index" class="text-decoration-none">
             <div class="card h-100 hover-card">
                 <div class="card-body text-center p-4">
-                    <div class="display-4 text-warning mb-3"><i class="bi bi-award-fill"></i></div>
+                    <div class="display-4 text-warning"><i class="bi bi-award-fill"></i></div>
                     <h4>Asignar Candidato a Puesto</h4>
                     <p class="text-muted">Asigne candidatos a los puestos electivos disponibles</p>
                     <span class="btn btn-outline-warning">Gestionar Asignaciones</span>
@@ -114,7 +120,7 @@
         <a asp-area="Dirigente" asp-controller="Alianzas" asp-action="Index" class="text-decoration-none">
             <div class="card h-100 hover-card">
                 <div class="card-body text-center p-4">
-                    <div class="display-4 text-danger mb-3"><i class="bi bi-handshake-fill"></i></div>
+                    <div class="display-4 text-danger"><i class="bi bi-person-plus-fill"></i></div>
                     <h4>Alianzas Políticas</h4>
                     <p class="text-muted">Gestione las alianzas con otros partidos políticos</p>
                     <span class="btn btn-outline-danger">Ver Alianzas</span>

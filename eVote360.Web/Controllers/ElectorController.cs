@@ -210,7 +210,7 @@ public class ElectorController : Controller
             CandidatoId = c.Id,
             NombreCandidato = c.Nombre,
             ApellidoCandidato = c.Apellido,
-            FotoCandidato = string.IsNullOrEmpty(c.FotoPath) ? "/images/candidates/default.png" : c.FotoPath,
+            FotoCandidato = string.IsNullOrEmpty(c.FotoPath) ? "/images/candidates/default.svg" : c.FotoPath,
             LogoPartido = "/images/logos/default.png",
             SiglasPartido = c.PartyNombre,
             NombrePartido = c.PartyNombre
